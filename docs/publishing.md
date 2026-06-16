@@ -47,7 +47,7 @@ This repo is configured as:
 }
 ```
 
-Login with an npm account that has publish access:
+Login with an npm account that has publish access for local registry checks:
 
 ```bash
 npm login --scope=@win.sh
@@ -59,11 +59,29 @@ Dry-run package contents:
 npm run pack:dry
 ```
 
-Publish:
+Publishing with provenance must run from a supported CI provider. The repository includes:
 
-```bash
-npm publish --access public --provenance
+- `.github/workflows/ci.yml` for checks and packaging dry-runs
+- `.github/workflows/release.yml` for tag-based npm publishing
+
+Local `npm publish` is expected to fail while `publishConfig.provenance` is enabled because npm cannot create provenance from a plain terminal session.
+
+## Trusted Publishing Setup
+
+Configure npm trusted publishing for the package:
+
+```text
+Package: @win.sh/win
+Provider: GitHub Actions
+Organization: win-sh
+Repository: win
+Workflow filename: release.yml
+Allowed action: npm publish
 ```
+
+Npm trusted publishing uses OIDC, so the release workflow has `id-token: write` and does not need a long-lived npm token.
+
+For the first `@win.sh/win` publish, npm may require the package to exist before package-level trusted publishing can be configured. If that happens, add a temporary GitHub Actions secret named `NPM_TOKEN` with publish access to the `win.sh` npm org, push the `v0.1.0` tag, then remove the secret after the package exists and trusted publishing is configured.
 
 ## Release Checklist
 
@@ -75,17 +93,14 @@ npm publish --access public --provenance
 
 ```bash
 git tag v0.1.0
-git push origin v0.1.0
 ```
 
-6. Publish to npm:
+6. Let GitHub Actions publish the tag:
 
 ```bash
-npm publish --access public --provenance
+git push origin v0.1.0
 ```
 
 ## Required Secrets
 
-The current CI only checks and packs. Publishing should stay manual until the org has decided on release permissions.
-
-If automated publishing is added later, use trusted publishing/provenance from GitHub Actions rather than storing long-lived npm tokens.
+No npm token is required when trusted publishing is configured on npmjs.com. `NPM_TOKEN` is only for bootstrapping the first package version if npm package settings are not available yet. If the org chooses not to use trusted publishing, remove `publishConfig.provenance` or publish from a supported CI environment with an authorized token.
