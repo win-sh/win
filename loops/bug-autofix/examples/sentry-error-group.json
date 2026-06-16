@@ -1,0 +1,53 @@
+{
+  "id": "BUG-9821",
+  "slug": "checkout-null-pointer",
+  "title": "TypeError: Cannot read properties of null (reading 'priceId')",
+  "level": "error",
+  "eventCount": 64,
+  "firstSeen": "2026-06-16T07:12:00.000Z",
+  "lastSeen": "2026-06-16T08:41:00.000Z",
+  "release": "melies-web@2026.06.16-1",
+  "previousRelease": "melies-web@2026.06.15-3",
+  "environment": "production",
+  "payingUsers": [
+    {
+      "id": "cus_melies_1042",
+      "plan": "pro",
+      "mrr": 49
+    },
+    {
+      "id": "cus_melies_2117",
+      "plan": "team",
+      "mrr": 99
+    },
+    {
+      "id": "cus_melies_3104",
+      "plan": "pro",
+      "mrr": 49
+    }
+  ],
+  "revenueAtRisk": 197,
+  "affectedRoutes": [
+    "/app/checkout",
+    "/api/checkout/session"
+  ],
+  "suspectedOwner": "billing-checkout",
+  "suspectFiles": [
+    "src/checkout/createCheckoutSession.ts",
+    "src/app/checkout/page.tsx",
+    "src/lib/pricing.ts"
+  ],
+  "stacktrace": [
+    {
+      "function": "createCheckoutSession",
+      "file": "src/checkout/createCheckoutSession.ts",
+      "line": 88
+    },
+    {
+      "function": "POST",
+      "file": "src/app/api/checkout/session/route.ts",
+      "line": 41
+    }
+  ],
+  "impact": "Checkout fails for users with an existing subscription record whose selected plan lookup returns null after the latest pricing deploy."
+}

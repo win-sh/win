@@ -42,6 +42,14 @@ node bin/win-loops.js run bug-autofix \
   --signal "Sentry error group checkout-null-pointer repeated 21 times in 1 hour."
 ```
 
+Create a `bug-autofix` run from the included Sentry-style fixture:
+
+```bash
+node bin/win-loops.js run bug-autofix \
+  --repo /path/to/app \
+  --fixture loops/bug-autofix/examples/sentry-error-group.json
+```
+
 Then ask Codex or Claude Code to execute the generated run brief under `.win/runs/`.
 
 ## Catalog

@@ -31,6 +31,14 @@ node /Users/romainsimon/dev/win-loops/bin/win-loops.js run bug-autofix \
   --signal "Production checkout error repeated 21 times."
 ```
 
+Create a run from the included Sentry-style fixture:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js run bug-autofix \
+  --repo /path/to/repo \
+  --fixture /Users/romainsimon/dev/win-loops/loops/bug-autofix/examples/sentry-error-group.json
+```
+
 Then ask the agent:
 
 ```text

@@ -1,41 +1,46 @@
 ---
 name: win-feedback-to-fix
-description: Scoped loop execution skill for Feedback to Fix. Use when win.sh or win-loops gives a run brief for this loop.
+description: Scoped loop execution skill for Feedback to Fix. Use when win.sh or win-loops gives a user feedback cluster run brief.
 ---
 
 # Feedback to Fix Executor
 
-This is a scoped loop execution skill. Execute the run brief; do not redefine the business objective.
+This is a scoped loop execution skill. Convert the supplied feedback into the smallest useful action: classification, issue, bug fix, docs improvement, support reply, or no-op.
 
 ## Inputs
 
-- The run brief from `.win/runs/<run-id>.md` or win.sh Cloud.
-- The loop contract from `.win/loops/feedback-to-fix/LOOP.md`.
-- Any linked artifacts, logs, screenshots, metrics, issues, or customer messages.
+- Run brief from `.win/runs/<run-id>.md` or win.sh Cloud.
+- Loop contract from `.win/loops/feedback-to-fix/LOOP.md`.
+- User quotes, support thread links, customer segment, usage data, related issues, and prior journal entries.
 
 ## Workflow
 
 1. Read the run brief and loop contract.
-2. Restate the signal and target outcome in one short paragraph.
-3. Gather only the context needed for this run.
-4. Diagnose using the loop contract's Diagnosis section.
-5. Take the smallest allowed action within authority.
-6. Run relevant checks or explain why no check is available.
-7. Report artifacts, risks, expected outcome, and recommended next check.
+2. Restate the representative user pain and affected segment.
+3. Classify the cluster: bug, feature request, support confusion, pricing objection, quality issue, edge case, or no-action.
+4. State why the selected classification beats the alternatives.
+5. If bug: create/reuse an issue and, if authorized, produce a scoped fix brief or patch.
+6. If support confusion: draft docs, macro, copy, onboarding, or FAQ improvement.
+7. If feature request: produce evidence score and roadmap recommendation. Do not build by default.
+8. Draft a customer reply when useful, with no promises unless authorized.
+9. Return artifacts and verification plan.
 
 ## Output
 
 Return:
 
-- Summary
-- Action taken or proposed
-- Artifact links
-- Checks run
-- Remaining risks
+- Classification
+- Evidence count and affected segment
+- Recommended action
+- Issue, PR, doc draft, or decision link
+- Customer reply draft when applicable
+- Explicit non-promises
 - Verification recommendation
 
 ## Constraints
 
-- Do not exceed the loop authority.
-- Do not spend money, publish, email customers, merge, deploy, or change billing unless the run brief explicitly authorizes it.
-- Prefer no-op or escalation when evidence is weak.
+- Do not send customer replies without communication authority.
+- Do not promise roadmap dates.
+- Do not issue refunds, credits, or coupons without money authority.
+- Do not build a feature when a docs/support fix is enough.
+- Preserve negative feedback in the journal.

@@ -13,6 +13,11 @@ Last updated: 2026-06-16
 - Added local run creation with run brief, JSONL state, journal entry, and adaptive `nextRun` metadata.
 - Scaffolded 50 readable loop packs.
 - Added tests for parser, catalog, install, run, and eval behavior.
+- Hand-authored deeper production contracts and executor skills for `bug-autofix`, `seo-growth`, and `feedback-to-fix`.
+- Added a Sentry-style fixture for `bug-autofix`.
+- Added `bug-autofix` signal adapter that turns the fixture into a scoped run signal and executor brief.
+- Added CLI support for `win-loops run bug-autofix --fixture <path>`.
+- Added focused production-loop and CLI fixture tests.
 
 ## Current Quality Gates
 
@@ -26,7 +31,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Replace generated generic loop text with deeper hand-authored playbooks for `bug-autofix`, `seo-growth`, and `feedback-to-fix`.
+- Add artifact reporting commands: `artifact attach`, `outcome record`, and `approval request`.
 - Add GitHub Actions CI after repo is published.
 
 ## First Production Candidate

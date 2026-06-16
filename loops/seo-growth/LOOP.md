@@ -13,60 +13,185 @@ default_authority: ask_first
 
 ## Goal
 
-Grow qualified organic traffic through repeated evidence-driven SEO improvements.
+Grow qualified organic traffic with measurable search improvements. The loop should find the highest-leverage SEO action, execute or draft it, then verify after search data has had time to move.
+
+The loop optimizes for qualified clicks and business intent. It should not create thin content just to increase page count.
 
 ## When This Runs
 
-GSC shows opportunity, rankings decay, competitors gain share, or the owner requests an SEO improvement cycle.
+Run when one of these conditions is true:
 
-The loop may also run when the owner manually starts it from win.sh, the local CLI, Codex, or Claude Code.
+- GSC has fresh data and a page/query crosses the minimum evidence threshold.
+- A valuable page loses clicks, CTR, or average position for at least 7 days.
+- A query sits in positions 4-20 with meaningful impressions.
+- A page has high impressions and below-benchmark CTR.
+- Competitors gain rankings on commercially relevant terms.
+- A new product feature, use case, or customer phrase creates a search opportunity.
+- The owner manually starts an SEO growth cycle.
+
+Minimum evidence:
+
+- at least 100 impressions over the comparison window, or
+- at least 20 clicks over the comparison window, or
+- a commercial query tied to an existing paying customer segment.
 
 ## Signals
 
-GSC pages and queries, current content, sitemap, internal links, competitor SERPs, and prior SEO loop journals.
+Read:
 
-The loop should ignore low-confidence or stale signals unless they repeat or affect important customers.
+- GSC query, page, country, device, clicks, impressions, CTR, and average position.
+- Existing page title, meta description, H1, first viewport, internal links, schema, and update date.
+- Sitemap, robots, canonical, indexing state, and page status.
+- Competitor SERP pages and snippets.
+- Prior SEO Growth and Content Refresh journal entries.
+- Product positioning, pricing, and conversion data when available.
+
+Ignore:
+
+- tiny impression changes
+- seasonal shifts without actionability
+- queries unrelated to the product
+- pages where a stronger page already owns the intent
 
 ## Diagnosis
 
-Choose whether the highest-leverage action is page refresh, new page, internal links, technical fix, or no-op.
+Choose exactly one primary action type:
 
-The loop must explicitly separate facts, assumptions, unknowns, and recommended next actions.
+1. CTR improvement: title, meta, snippet, FAQ, proof, or SERP promise.
+2. Ranking improvement: content depth, examples, intent match, internal links.
+3. New page: uncovered intent with enough demand and clear differentiation.
+4. Internal linking: relevant source pages can lift a target page.
+5. Technical fix: indexing, canonical, schema, sitemap, or performance issue.
+6. No-op: evidence is weak, query is irrelevant, or another loop should handle it.
+
+Check cannibalization before creating or changing pages. If two pages compete for the same query, recommend consolidation or clearer intent split.
+
+Diagnosis must include:
+
+- target page or proposed URL
+- target query cluster
+- baseline clicks, impressions, CTR, and average position
+- search intent
+- competitor pattern
+- chosen action
+- why the other action types were rejected
 
 ## Allowed Actions
 
-Create page brief, edit existing page, draft new article, add internal links, or open a technical SEO issue.
+The loop may:
 
-The loop may also create a decision record, attach artifacts, and request approval when the action exceeds authority.
+- Create an SEO opportunity brief.
+- Edit title, meta, intro, headings, FAQ, examples, schema, and internal links.
+- Draft a new page or article.
+- Open a PR against a website repo.
+- Create a technical SEO issue.
+- Request indexing or validation when the connector exists.
+- Schedule delayed verification.
+
+The loop may not:
+
+- Publish AI-slop pages.
+- Create pages without unique proof, product fit, or search intent.
+- Change canonical, noindex, robots, sitemap, or large navigation structures without approval.
+- Rewrite brand positioning without approval.
+- Delete or redirect pages without approval.
 
 ## Authority
 
-Drafts and low-risk PRs can be automatic. Publishing follows website authority.
+Default authority:
 
-Default mode is ask-first. Observe-only is allowed for newly installed loops. The loop cannot raise its own authority.
+- Read GSC and crawl public pages: automatic.
+- Create brief: automatic.
+- Draft content or PR: automatic.
+- Publish existing-page copy edits: ask-first.
+- Publish new page: ask-first.
+- Technical indexing changes: ask-first.
+- Delete, redirect, noindex, canonical changes: ask-first.
+
+The loop can suggest authority upgrade after at least 8 verified SEO changes with positive or neutral outcomes and no quality regressions.
 
 ## Executor Instructions
 
-Use the companion `SKILL.md` as the executor workflow. The executor receives a scoped run brief and should not broaden the business objective. Codex, Claude Code, GitHub Actions, or win.sh Cloud may act as executors.
+Use the companion `SKILL.md` as the scoped executor workflow.
+
+The run brief must include:
+
+- target page or proposed URL
+- query cluster
+- baseline metrics
+- selected action type
+- competitor examples
+- required proof or product examples
+- verification date
+
+The executor should make the smallest content or code change that matches the action type. It should preserve brand voice, avoid generic filler, and keep claims supportable.
 
 ## Verification
 
-Verify after 14-28 days using clicks, CTR, rank, impressions, and indexed status.
+SEO verification is delayed.
 
-Verification must produce an outcome: success, failed, inconclusive, or no-action-correct.
+Default windows:
+
+- Existing-page CTR/title/meta/internal-link changes: verify after 14 days.
+- Content depth or major page refresh: verify after 21 days.
+- New page: verify indexing after 7 days, then performance after 28 days.
+- Technical indexing fix: verify as soon as GSC validation or crawl result updates.
+
+Success:
+
+- clicks increase by at least 10%, or
+- CTR improves by at least 15% on the target query cluster, or
+- average position improves by at least 2 positions, or
+- page becomes indexed and starts receiving impressions, or
+- no-op was correct because evidence stayed weak.
+
+Failure:
+
+- traffic drops materially without explanation
+- cannibalization appears
+- page is not indexed after the expected window
+- conversion quality worsens despite click growth
 
 ## Adaptive Scheduling
 
-Run when fresh GSC data contains material opportunity. After a change, wait for the search verification window.
+Scheduling rules:
 
-Every execution must end with `nextRunAt`, a reason, a confidence level, and the signal required before the next meaningful run.
+- Fresh GSC data with material opportunity: run within 24 hours.
+- After existing-page change: verify in 14 days.
+- After major refresh: verify in 21 days.
+- After new page publish: index check in 7 days, performance check in 28 days.
+- If GSC data volume is below minimum evidence: wait until sample threshold is reached.
+- If cannibalization risk is detected: pause and ask before publishing.
+
+Every run must end with `nextRunAt`, reason, confidence, target metric, and verification window.
 
 ## Journal
 
-Append one journal entry after each run with signal, diagnosis, action, expected outcome, verification date, actual outcome when known, and learning.
+Append one entry per SEO action:
+
+- target page
+- query cluster
+- baseline metrics
+- action type
+- exact change
+- expected outcome
+- verification date
+- actual outcome
+- decision: keep, revert, expand, or stop
+
+Do not overwrite failed SEO hypotheses. They prevent repeat mistakes.
 
 ## Memory Update
 
-SEO hypothesis, action taken, baseline, verification date, result, and failed tactics.
+Record:
 
-Write learnings as reusable loop memory, not generic notes. Failed tactics should be recorded so the loop does not retry them blindly.
+- search intent pattern
+- competitor pattern
+- page type that worked or failed
+- title/meta pattern
+- internal-link source pages
+- cannibalization notes
+- verification result
+- query clusters to avoid
+
+If a tactic fails twice for the same site, require stronger evidence before trying it again.

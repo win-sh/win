@@ -4,6 +4,7 @@ import { resolve } from 'node:path'
 import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
 import { installLoop } from '../src/installer.js'
+import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
 import { createLoopRun } from '../src/runner.js'
 
 const [command, ...args] = process.argv.slice(2)
@@ -73,9 +74,26 @@ async function runLoop(args) {
   const loopId = readArg(args, 0, 'loop id')
   const targetRepo = readOption(args, '--repo') || process.cwd()
   const trigger = readOption(args, '--trigger') || 'manual'
+  const fixtureFile = readOption(args, '--fixture')
   const signalFile = readOption(args, '--signal-file')
-  const signal = signalFile ? await readFile(resolve(signalFile), 'utf8') : readOption(args, '--signal') || ''
+  const signal = await resolveSignal({ loopId, fixtureFile, signalFile, args })
   return createLoopRun({ loopId, targetRepo, trigger, signal })
+}
+
+async function resolveSignal({ loopId, fixtureFile, signalFile, args }) {
+  if (fixtureFile) {
+    const fixture = JSON.parse(await readFile(resolve(fixtureFile), 'utf8'))
+    if (loopId === 'bug-autofix') {
+      return buildBugAutofixSignal(fixture).runBrief
+    }
+    return JSON.stringify(fixture, null, 2)
+  }
+
+  if (signalFile) {
+    return readFile(resolve(signalFile), 'utf8')
+  }
+
+  return readOption(args, '--signal') || ''
 }
 
 async function journal(args) {
@@ -114,7 +132,7 @@ Commands:
   list
   inspect <loop>
   install <loop> [--repo <path>] [--agent codex|claude-code]
-  run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
+  run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>]
   journal <loop> [--repo <path>]
   eval
 `
