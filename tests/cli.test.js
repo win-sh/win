@@ -38,3 +38,26 @@ test('CLI run bug-autofix --fixture creates a run from a sentry-like fixture', a
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI tick shows scheduled loop actions and writes due run briefs', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-tick-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout } = await execFileAsync(process.execPath, ['bin/win-loops.js', 'tick', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    assert.match(stdout, /Loop/)
+    assert.match(stdout, /bug-autofix/)
+    assert.match(stdout, /ran/)
+
+    const runs = await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8')
+    assert.match(runs, /"trigger":"tick"/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})

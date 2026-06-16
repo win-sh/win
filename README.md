@@ -67,6 +67,14 @@ bug-autofix  enabled   diagnosing  2026-06-16T14:00:00.000Z  4h 30m     2026-06-
 seo-growth   disabled  watching    -                         not scheduled  -
 ```
 
+Run one local scheduler pass:
+
+```bash
+node bin/win-loops.js tick --repo /path/to/app
+```
+
+`tick` inspects installed loops, skips disabled loops, creates run briefs for enabled loops whose `nextRunAt` is due, and updates each loop state with the next adaptive run time.
+
 ## Catalog
 
 The initial catalog has 50 loop packs across:
@@ -114,6 +122,7 @@ win-loops inspect <loop>
 win-loops install <loop> [--repo <path>] [--agent codex|claude-code]
 win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
 win-loops status [--repo <path>]
+win-loops tick [--repo <path>]
 win-loops enable <loop> [--repo <path>]
 win-loops disable <loop> [--repo <path>]
 win-loops journals [--repo <path>]
@@ -129,4 +138,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, CLI flows, and journal writes.

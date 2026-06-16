@@ -14,7 +14,7 @@ export async function getInstalledLoopStatus({ targetRepo = process.cwd(), now =
     const loopId = entry.name
     const state = await readLoopState(join(loopsDir, loopId, 'state.json'), loopId)
     const latestRun = [...runs].reverse().find(run => run.loopId === loopId) || null
-    const nextRunAt = latestRun?.nextRun?.at || state.nextRunAt || null
+    const nextRunAt = state.nextRunAt || latestRun?.nextRun?.at || null
 
     rows.push({
       id: loopId,

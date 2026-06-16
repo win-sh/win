@@ -7,6 +7,7 @@ import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
 import { createLoopRun } from '../src/runner.js'
 import { getInstalledLoopStatus, renderStatusTable } from '../src/status.js'
+import { tickLoops, renderTickTable } from '../src/tick.js'
 
 const [command, ...args] = process.argv.slice(2)
 
@@ -33,6 +34,8 @@ async function run(command, args) {
       return runLoop(args)
     case 'status':
       return status(args)
+    case 'tick':
+      return tick(args)
     case 'enable':
       return enableLoop(args, true)
     case 'disable':
@@ -125,6 +128,12 @@ async function status(args) {
   return renderStatusTable(rows)
 }
 
+async function tick(args) {
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const report = await tickLoops({ targetRepo })
+  return renderTickTable(report.rows)
+}
+
 async function enableLoop(args, enabled) {
   const loopId = readArg(args, 0, 'loop id')
   const targetRepo = readOption(args, '--repo') || process.cwd()
@@ -164,6 +173,7 @@ Commands:
   install <loop> [--repo <path>] [--agent codex|claude-code]
   run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>]
   status [--repo <path>]
+  tick [--repo <path>]
   enable <loop> [--repo <path>]
   disable <loop> [--repo <path>]
   journals [--repo <path>]
