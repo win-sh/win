@@ -73,9 +73,10 @@ Show the operator inbox and next action:
 node bin/win-loops.js inbox --repo /path/to/app
 node bin/win-loops.js next --repo /path/to/app
 node bin/win-loops.js exec --repo /path/to/app --agent codex --dry-run
+node bin/win-loops.js exec --repo /path/to/app --agent codex --run <run-id>
 ```
 
-`inbox` summarizes pending executions, approvals, approved actions waiting for scheduler resume, overdue outcome checks, and latest proof per loop. `next` prints the single highest-priority operator action. `exec --dry-run` renders the local-agent handoff for the next executable run brief.
+`inbox` summarizes pending executions, approvals, approved actions waiting for scheduler resume, overdue outcome checks, and latest proof per loop. `next` prints the single highest-priority operator action. `exec --dry-run` renders the local-agent handoff for the next executable run brief. `exec` without `--dry-run` runs the local agent command, captures stdout/stderr, updates run status, and writes an execution log.
 
 Run one local scheduler pass:
 
@@ -163,7 +164,7 @@ win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
 win-loops status [--repo <path>]
 win-loops inbox [--repo <path>]
 win-loops next [--repo <path>]
-win-loops exec [--repo <path>] [--agent codex|claude-code] [--run <run-id>] --dry-run
+win-loops exec [--repo <path>] [--agent codex|claude-code] [--run <run-id>] [--dry-run]
 win-loops tick [--repo <path>]
 win-loops enable <loop> [--repo <path>]
 win-loops disable <loop> [--repo <path>]
@@ -185,4 +186,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, executor dry-runs, reporting commands, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, executor dry-runs and execution capture, reporting commands, CLI flows, and journal writes.

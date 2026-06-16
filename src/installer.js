@@ -11,11 +11,13 @@ export async function installLoop({ loopId, targetRepo, agent = 'codex', sourceR
   const loopTargetDir = join(target, '.win', 'loops', loopId)
   const stateDir = join(target, '.win', 'state')
   const runsDir = join(target, '.win', 'runs')
+  const executionsDir = join(target, '.win', 'executions')
   const skillDir = join(target, '.agents', 'skills', `win-${loopId}`)
 
   await mkdir(loopTargetDir, { recursive: true })
   await mkdir(stateDir, { recursive: true })
   await mkdir(runsDir, { recursive: true })
+  await mkdir(executionsDir, { recursive: true })
   await mkdir(skillDir, { recursive: true })
 
   await writeFile(join(loopTargetDir, 'LOOP.md'), pack.loopMarkdown, 'utf8')
@@ -26,6 +28,7 @@ export async function installLoop({ loopId, targetRepo, agent = 'codex', sourceR
   await ensureFile(join(stateDir, 'artifacts.jsonl'))
   await ensureFile(join(stateDir, 'outcomes.jsonl'))
   await ensureFile(join(stateDir, 'approvals.jsonl'))
+  await ensureFile(join(stateDir, 'executions.jsonl'))
 
   return {
     loopId,

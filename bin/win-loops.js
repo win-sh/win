@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
-import { buildExecPlan, renderExecPlan } from '../src/executor.js'
+import { buildExecPlan, executeExecPlan, renderExecPlan } from '../src/executor.js'
 import { buildInbox, pickNextAction, renderInbox, renderNextAction } from '../src/inbox.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
@@ -162,20 +162,23 @@ async function next(args) {
 }
 
 async function execLoop(args) {
-  if (!args.includes('--dry-run')) {
-    throw new Error('exec currently requires --dry-run')
-  }
-
   const targetRepo = readOption(args, '--repo') || process.cwd()
   const agent = readOption(args, '--agent') || 'codex'
   const runId = readOption(args, '--run') || ''
+  const dryRun = args.includes('--dry-run')
   const plan = await buildExecPlan({
     targetRepo,
     agent,
     runId,
-    dryRun: true
+    dryRun
   })
-  return renderExecPlan(plan)
+  if (dryRun) return renderExecPlan(plan)
+
+  const execution = await executeExecPlan(plan)
+  if (execution.status === 'failed') {
+    process.exitCode = execution.exitCode || 1
+  }
+  return execution
 }
 
 async function tick(args) {
@@ -287,7 +290,7 @@ Commands:
   status [--repo <path>]
   inbox [--repo <path>]
   next [--repo <path>]
-  exec [--repo <path>] [--agent codex|claude-code] [--run <run-id>] --dry-run
+  exec [--repo <path>] [--agent codex|claude-code] [--run <run-id>] [--dry-run]
   tick [--repo <path>]
   enable <loop> [--repo <path>]
   disable <loop> [--repo <path>]

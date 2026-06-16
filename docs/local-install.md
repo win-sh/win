@@ -18,7 +18,9 @@ This creates:
   state/artifacts.jsonl
   state/outcomes.jsonl
   state/approvals.jsonl
+  state/executions.jsonl
   runs/
+  executions/
 
 .agents/
   skills/win-<loop-id>/SKILL.md
@@ -111,9 +113,10 @@ Show operator work:
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js inbox --repo /path/to/repo
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js next --repo /path/to/repo
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js exec --repo /path/to/repo --agent codex --dry-run
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js exec --repo /path/to/repo --agent codex --run <run-id>
 ```
 
-`inbox` shows pending executions, pending approvals, approved actions waiting for `tick`, overdue outcome checks, and latest loop context. `next` prints the single next action to take. `exec --dry-run` prints the agent prompt and command hint for the next executable run brief.
+`inbox` shows pending executions, pending approvals, approved actions waiting for `tick`, overdue outcome checks, and latest loop context. `next` prints the single next action to take. `exec --dry-run` prints the agent prompt and command hint for the next executable run brief. `exec` without `--dry-run` runs the local agent command and captures stdout/stderr in `.win/executions/`.
 
 Enable or disable a loop:
 

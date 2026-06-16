@@ -30,6 +30,7 @@ Last updated: 2026-06-16
 - Added operator inbox command: `win-loops inbox --repo <path>`.
 - Added next-action command: `win-loops next --repo <path>`.
 - Added executor dry-run command: `win-loops exec --agent codex|claude-code --dry-run`.
+- Added real executor process spawning with `.win/executions` logs and `executions.jsonl` state.
 
 ## Current Quality Gates
 
@@ -43,7 +44,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Add real executor process spawning and report-back capture.
+- Add report-back parsing from execution logs into artifact suggestions.
 - Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
 - Add GitHub Actions CI after repo is published.
 

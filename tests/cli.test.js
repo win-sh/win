@@ -316,3 +316,55 @@ test('CLI exec --dry-run renders an agent handoff for the next executable run', 
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI exec captures real command output when dry-run is omitted', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-exec-real-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: runStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Checkout crash repeated 21 times.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const run = JSON.parse(runStdout)
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'exec',
+      '--repo',
+      target,
+      '--agent',
+      'codex',
+      '--run',
+      run.id
+    ], {
+      cwd: new URL('..', import.meta.url).pathname,
+      env: {
+        ...process.env,
+        WIN_LOOPS_CODEX_EXECUTABLE: process.execPath,
+        WIN_LOOPS_CODEX_ARGS_JSON: JSON.stringify(['-e', 'console.log("cli agent stdout")'])
+      }
+    })
+
+    const execution = JSON.parse(stdout)
+    assert.equal(execution.status, 'succeeded')
+
+    const log = await readFile(join(target, execution.logPath), 'utf8')
+    assert.match(log, /cli agent stdout/)
+
+    const runs = await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8')
+    assert.match(runs, /"status":"executed"/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
