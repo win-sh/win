@@ -31,6 +31,32 @@ Most agent automations are cron jobs with a prompt attached. Real business work 
 
 `win` packages those loops as files you can read, version, install, run locally, and later hand to hosted win.sh.
 
+## Open Source vs Hosted
+
+| Use this repo when you want... | Use hosted win.sh when you want... |
+| --- | --- |
+| local files, local agent execution, and full inspectability | no install, managed scheduling, and team dashboards |
+| Markdown loop packs you can edit and commit | OAuth connectors and hosted connector snapshots |
+| Codex or Claude Code running in your own repo | managed execution and approval queues |
+| JSONL state, append-only journals, and terminal workflows | email/mobile approvals, shared history, and central governance |
+
+The loop logic stays open and portable. Hosted win.sh is the managed operating layer around the same contracts.
+
+## win is right for you if
+
+- you already use Codex, Claude Code, or another coding agent
+- you want agents to improve business metrics, not just finish one-off tasks
+- you want every decision, artifact, approval, and outcome to be inspectable
+- you need authority boundaries before agents touch code, content, customers, or spend
+- you want a path from local automation to hosted team workflows
+
+## win is not
+
+- a general task manager for humans
+- a replacement for Codex or Claude Code
+- a black-box agent platform
+- a promise that agents should merge, publish, spend, or email customers without approval
+
 ## 60-Second Start
 
 ```bash
