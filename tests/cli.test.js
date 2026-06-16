@@ -61,3 +61,87 @@ test('CLI tick shows scheduled loop actions and writes due run briefs', async ()
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI reporting commands attach artifacts, outcomes, and approvals to a run', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-reporting-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: runStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Checkout crash repeated 21 times.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const run = JSON.parse(runStdout)
+
+    const { stdout: artifactStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'artifact',
+      'attach',
+      run.id,
+      '--repo',
+      target,
+      '--kind',
+      'pr',
+      '--url',
+      'https://github.com/acme/app/pull/123',
+      '--title',
+      'Checkout fix'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.equal(JSON.parse(artifactStdout).kind, 'pr')
+
+    const { stdout: outcomeStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'outcome',
+      'record',
+      run.id,
+      '--repo',
+      target,
+      '--status',
+      'improved',
+      '--metric',
+      'error_rate_down',
+      '--summary',
+      'Error rate dropped.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.equal(JSON.parse(outcomeStdout).status, 'improved')
+
+    const { stdout: approvalStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'approval',
+      'request',
+      run.id,
+      '--repo',
+      target,
+      '--action',
+      'Merge PR',
+      '--reason',
+      'Checkout code changed.',
+      '--risk',
+      'medium'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.equal(JSON.parse(approvalStdout).status, 'pending')
+
+    const runs = await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8')
+    assert.match(runs, /"artifacts":/)
+    assert.match(runs, /"latestOutcome":/)
+    assert.match(runs, /"pendingApprovals":/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})

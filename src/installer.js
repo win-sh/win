@@ -23,6 +23,7 @@ export async function installLoop({ loopId, targetRepo, agent = 'codex', sourceR
   await writeFile(join(loopTargetDir, 'state.json'), `${JSON.stringify(defaultLoopState(loopId, agent), null, 2)}\n`, 'utf8')
   await writeFile(join(skillDir, 'SKILL.md'), withInstallHeader(pack.skillMarkdown, agent), 'utf8')
   await ensureFile(join(stateDir, 'runs.jsonl'))
+  await ensureFile(join(stateDir, 'artifacts.jsonl'))
   await ensureFile(join(stateDir, 'outcomes.jsonl'))
   await ensureFile(join(stateDir, 'approvals.jsonl'))
 

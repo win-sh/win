@@ -23,6 +23,8 @@ Last updated: 2026-06-16
 - Added `enable`, `disable`, `journals`, and per-loop `journal` flows for local operation.
 - Added local scheduler command: `win-loops tick --repo <path>`.
 - Added due-loop detection that skips disabled loops, writes due run briefs, and persists adaptive `nextRunAt` state.
+- Added reporting commands: `artifact attach`, `outcome record`, and `approval request`.
+- Added `artifacts.jsonl` plus run updates and journal entries for reporting events.
 
 ## Current Quality Gates
 
@@ -36,7 +38,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Add artifact reporting commands: `artifact attach`, `outcome record`, and `approval request`.
+- Add approval resolution commands: `approval approve` and `approval reject`.
 - Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
 - Add GitHub Actions CI after repo is published.
 

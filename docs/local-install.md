@@ -15,6 +15,7 @@ This creates:
   loops/<loop-id>/LOOP.md
   loops/<loop-id>/journal.md
   state/runs.jsonl
+  state/artifacts.jsonl
   state/outcomes.jsonl
   state/approvals.jsonl
   runs/
@@ -46,6 +47,39 @@ Use the win-bug-autofix skill. Execute the latest run brief in .win/runs/.
 ```
 
 The agent should report artifacts back into the run journal or hosted win.sh.
+
+Attach an artifact after execution:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js artifact attach <run-id> \
+  --repo /path/to/repo \
+  --kind pr \
+  --url https://github.com/acme/app/pull/123 \
+  --title "Checkout fix" \
+  --summary "Fixes checkout crash and adds regression coverage."
+```
+
+Record an outcome after the verification window:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js outcome record <run-id> \
+  --repo /path/to/repo \
+  --status improved \
+  --metric error_rate_down_92_percent \
+  --summary "Sentry group dropped after deploy." \
+  --evidence https://sentry.io/acme/issues/checkout-null-pointer/
+```
+
+Request approval before a sensitive action:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js approval request <run-id> \
+  --repo /path/to/repo \
+  --action "Merge PR https://github.com/acme/app/pull/123" \
+  --reason "Fix is tested but touches checkout payment flow." \
+  --risk medium \
+  --approver founder
+```
 
 ## Terminal Dashboard
 

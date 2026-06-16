@@ -75,6 +75,28 @@ node bin/win-loops.js tick --repo /path/to/app
 
 `tick` inspects installed loops, skips disabled loops, creates run briefs for enabled loops whose `nextRunAt` is due, and updates each loop state with the next adaptive run time.
 
+Report what happened during a run:
+
+```bash
+node bin/win-loops.js artifact attach <run-id> \
+  --repo /path/to/app \
+  --kind pr \
+  --url https://github.com/acme/app/pull/123 \
+  --title "Checkout fix"
+
+node bin/win-loops.js outcome record <run-id> \
+  --repo /path/to/app \
+  --status improved \
+  --metric error_rate_down \
+  --summary "Checkout crash dropped after deploy."
+
+node bin/win-loops.js approval request <run-id> \
+  --repo /path/to/app \
+  --action "Merge PR 123" \
+  --reason "Touches checkout payment flow." \
+  --risk medium
+```
+
 ## Catalog
 
 The initial catalog has 50 loop packs across:
@@ -127,6 +149,9 @@ win-loops enable <loop> [--repo <path>]
 win-loops disable <loop> [--repo <path>]
 win-loops journals [--repo <path>]
 win-loops journal <loop> [--repo <path>]
+win-loops artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
+win-loops outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
+win-loops approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
 win-loops eval
 ```
 
@@ -138,4 +163,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, reporting commands, CLI flows, and journal writes.

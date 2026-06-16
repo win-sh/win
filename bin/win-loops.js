@@ -5,6 +5,7 @@ import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
+import { attachArtifact, recordOutcome, requestApproval } from '../src/reporting.js'
 import { createLoopRun } from '../src/runner.js'
 import { getInstalledLoopStatus, renderStatusTable } from '../src/status.js'
 import { tickLoops, renderTickTable } from '../src/tick.js'
@@ -44,6 +45,12 @@ async function run(command, args) {
       return journals(args)
     case 'journal':
       return journal(args)
+    case 'artifact':
+      return artifact(args)
+    case 'outcome':
+      return outcome(args)
+    case 'approval':
+      return approval(args)
     case 'eval':
       return evalCatalog()
     case 'help':
@@ -141,6 +148,55 @@ async function enableLoop(args, enabled) {
   return `${state.id} ${state.enabled ? 'enabled' : 'disabled'}\n`
 }
 
+async function artifact(args) {
+  const subcommand = readArg(args, 0, 'artifact subcommand')
+  if (subcommand !== 'attach') throw new Error(`Unknown artifact command: ${subcommand}`)
+
+  const runId = readArg(args, 1, 'run id')
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  return attachArtifact({
+    targetRepo,
+    runId,
+    kind: readOption(args, '--kind') || undefined,
+    title: readOption(args, '--title') || undefined,
+    url: readOption(args, '--url') || '',
+    path: readOption(args, '--path') || '',
+    summary: readOption(args, '--summary') || ''
+  })
+}
+
+async function outcome(args) {
+  const subcommand = readArg(args, 0, 'outcome subcommand')
+  if (subcommand !== 'record') throw new Error(`Unknown outcome command: ${subcommand}`)
+
+  const runId = readArg(args, 1, 'run id')
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  return recordOutcome({
+    targetRepo,
+    runId,
+    status: readOption(args, '--status'),
+    metric: readOption(args, '--metric') || '',
+    summary: readOption(args, '--summary') || '',
+    evidence: readOption(args, '--evidence') || ''
+  })
+}
+
+async function approval(args) {
+  const subcommand = readArg(args, 0, 'approval subcommand')
+  if (subcommand !== 'request') throw new Error(`Unknown approval command: ${subcommand}`)
+
+  const runId = readArg(args, 1, 'run id')
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  return requestApproval({
+    targetRepo,
+    runId,
+    action: readOption(args, '--action'),
+    reason: readOption(args, '--reason'),
+    risk: readOption(args, '--risk') || 'medium',
+    approver: readOption(args, '--approver') || ''
+  })
+}
+
 async function evalCatalog() {
   const catalog = await loadCatalog()
   const report = await validateCatalog(catalog)
@@ -178,6 +234,9 @@ Commands:
   disable <loop> [--repo <path>]
   journals [--repo <path>]
   journal <loop> [--repo <path>]
+  artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
+  outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
+  approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
   eval
 `
 }

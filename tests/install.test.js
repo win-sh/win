@@ -21,6 +21,7 @@ test('installLoop installs loop contract, executor skill, and state files into a
     assert.ok(existsSync(join(target, '.win', 'loops', 'bug-autofix', 'LOOP.md')))
     assert.ok(existsSync(join(target, '.win', 'loops', 'bug-autofix', 'journal.md')))
     assert.ok(existsSync(join(target, '.win', 'state', 'runs.jsonl')))
+    assert.ok(existsSync(join(target, '.win', 'state', 'artifacts.jsonl')))
     assert.ok(existsSync(join(target, '.agents', 'skills', 'win-bug-autofix', 'SKILL.md')))
 
     const skill = await readFile(join(target, '.agents', 'skills', 'win-bug-autofix', 'SKILL.md'), 'utf8')
