@@ -1,83 +1,122 @@
 <svg width="1280" height="360" viewBox="0 0 1280 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">win.sh business loops for AI agents</title>
-  <desc id="desc">A visual flow from business signals to scoped agent runs, proof, outcomes, and adaptive scheduling.</desc>
+  <desc id="desc">A bright illustrated command center showing win.sh business loops running from signals to journals, approvals, proof, and adaptive next runs.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="360" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#071014"/>
-      <stop offset="0.48" stop-color="#101820"/>
-      <stop offset="1" stop-color="#16120F"/>
+    <linearGradient id="sky" x1="0" y1="0" x2="1280" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A8E4FF"/>
+      <stop offset="0.62" stop-color="#7CCBFA"/>
+      <stop offset="1" stop-color="#5EB8EE"/>
     </linearGradient>
-    <linearGradient id="accent" x1="138" y1="64" x2="598" y2="264" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#38E6A6"/>
-      <stop offset="0.52" stop-color="#54B7FF"/>
-      <stop offset="1" stop-color="#F2B84B"/>
+    <linearGradient id="cream" x1="68" y1="54" x2="596" y2="282" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF3"/>
+      <stop offset="1" stop-color="#FFF0C7"/>
     </linearGradient>
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.28"/>
+    <pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2" fill="#FFFFFF" opacity="0.42"/>
+    </pattern>
+    <filter id="lift" x="-8%" y="-10%" width="116%" height="122%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="8" dy="10" stdDeviation="0" flood-color="#1B1B1B" flood-opacity="1"/>
     </filter>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto" markerUnits="strokeWidth">
-      <path d="M1 1L8 5L1 9" stroke="#7DD3FC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-    </marker>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#14608A" flood-opacity="0.22"/>
+    </filter>
+    <style>
+      .display { font-family: Nunito, ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1B1B1B; letter-spacing: 0; }
+      .mono { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace; letter-spacing: 0; }
+      .outline { stroke: #1B1B1B; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { stroke: #1B1B1B; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
   </defs>
 
-  <rect width="1280" height="360" rx="28" fill="url(#bg)"/>
-  <path d="M0 286C122 234 252 240 390 282C554 332 692 332 838 272C1013 199 1123 196 1280 252V360H0V286Z" fill="#0E2A2B" opacity="0.55"/>
-  <path d="M867 42C1015 21 1143 56 1280 122V0H805C812 27 835 47 867 42Z" fill="#26351E" opacity="0.7"/>
+  <rect width="1280" height="360" rx="30" fill="url(#sky)"/>
+  <rect width="1280" height="360" rx="30" fill="url(#dots)"/>
+  <path d="M0 277C116 238 217 240 330 275C472 319 596 320 733 280C898 232 1034 219 1280 270V360H0V277Z" fill="#8AD45B" class="outline"/>
+  <path d="M0 305C127 276 253 285 388 310C562 342 738 331 903 300C1034 276 1157 276 1280 301V360H0V305Z" fill="#57B84C" opacity="0.92"/>
 
-  <g opacity="0.18">
-    <path d="M88 68H390" stroke="#FFFFFF"/>
-    <path d="M88 116H506" stroke="#FFFFFF"/>
-    <path d="M88 164H426" stroke="#FFFFFF"/>
-    <path d="M88 212H482" stroke="#FFFFFF"/>
-    <path d="M88 260H358" stroke="#FFFFFF"/>
+  <g opacity="0.96">
+    <path d="M92 70C96 49 115 35 137 37C148 20 173 15 191 29C207 21 229 25 241 42C261 42 277 55 278 74C278 94 262 107 240 107H116C96 107 82 92 92 70Z" fill="#FFFFFF" class="thin"/>
+    <path d="M1033 62C1037 44 1053 33 1072 35C1083 20 1105 17 1121 29C1137 23 1155 29 1164 43C1184 43 1198 56 1198 73C1198 91 1184 102 1164 102H1056C1038 102 1024 90 1033 62Z" fill="#FFFFFF" class="thin"/>
+    <path d="M530 30C534 14 548 5 565 7C573 -5 592 -8 606 3C619 -2 636 3 644 16C661 16 674 27 674 42C674 58 661 68 644 68H546C529 68 518 57 530 30Z" fill="#FFFFFF" opacity="0.72"/>
   </g>
 
-  <g transform="translate(76 62)">
-    <rect x="0" y="0" width="508" height="236" rx="22" fill="#0B1117" stroke="#263846" filter="url(#softShadow)"/>
-    <rect x="26" y="26" width="82" height="34" rx="17" fill="url(#accent)"/>
-    <text x="40" y="49" fill="#071014" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="18" font-weight="800">win.sh</text>
-    <text x="26" y="104" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="42" font-weight="800">Business loops</text>
-    <text x="26" y="150" fill="#F8FAFC" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="42" font-weight="800">for AI agents</text>
-    <text x="28" y="192" fill="#B9C8D6" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="19" font-weight="500">Signals -> briefs -> agent work -> proof -> outcomes</text>
-  </g>
+  <g transform="translate(64 54)" filter="url(#lift)">
+    <rect x="0" y="0" width="532" height="224" rx="28" fill="url(#cream)" class="outline"/>
+    <g transform="translate(30 28)">
+      <rect x="0" y="0" width="148" height="48" rx="24" fill="#FFFFFF" class="thin"/>
+      <g transform="translate(18 10)">
+        <path d="M2 28H40L44 8L32 18L22 4L12 18L0 8L2 28Z" fill="#FFD34D" class="thin"/>
+        <circle cx="22" cy="4" r="3.5" fill="#FC5634" stroke="#1B1B1B" stroke-width="2"/>
+        <circle cx="0" cy="8" r="3.5" fill="#FC5634" stroke="#1B1B1B" stroke-width="2"/>
+        <circle cx="44" cy="8" r="3.5" fill="#FC5634" stroke="#1B1B1B" stroke-width="2"/>
+      </g>
+      <text x="76" y="31" class="display" font-size="24" font-weight="900">win.sh</text>
+    </g>
 
-  <g transform="translate(620 70)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <g filter="url(#softShadow)">
-      <rect x="0" y="0" width="158" height="74" rx="18" fill="#0C141B" stroke="#2A4454"/>
-      <circle cx="30" cy="37" r="13" fill="#38E6A6"/>
-      <text x="54" y="33" fill="#F8FAFC" font-size="17" font-weight="750">Watch</text>
-      <text x="54" y="54" fill="#93A8B8" font-size="12">logs, GSC, feedback</text>
-    </g>
-    <path d="M166 37H208" stroke="#7DD3FC" stroke-width="2" marker-end="url(#arrow)"/>
-    <g filter="url(#softShadow)" transform="translate(218 0)">
-      <rect x="0" y="0" width="158" height="74" rx="18" fill="#0C141B" stroke="#2A4454"/>
-      <circle cx="30" cy="37" r="13" fill="#54B7FF"/>
-      <text x="54" y="33" fill="#F8FAFC" font-size="17" font-weight="750">Brief</text>
-      <text x="54" y="54" fill="#93A8B8" font-size="12">scoped run plan</text>
-    </g>
-    <path d="M384 37H426" stroke="#7DD3FC" stroke-width="2" marker-end="url(#arrow)"/>
-    <g filter="url(#softShadow)" transform="translate(436 0)">
-      <rect x="0" y="0" width="158" height="74" rx="18" fill="#0C141B" stroke="#2A4454"/>
-      <circle cx="30" cy="37" r="13" fill="#F2B84B"/>
-      <text x="54" y="33" fill="#F8FAFC" font-size="17" font-weight="750">Execute</text>
-      <text x="54" y="54" fill="#93A8B8" font-size="12">Codex or Claude</text>
+    <text x="30" y="112" class="display" font-size="48" font-weight="950">Business loops</text>
+    <text x="30" y="163" class="display" font-size="48" font-weight="950">for AI agents</text>
+    <text x="32" y="203" class="display" font-size="19" font-weight="800" fill="#3B3B3B">Signals -&gt; briefs -&gt; agent work -&gt; proof -&gt; next run</text>
+
+    <g transform="translate(352 26)">
+      <rect x="0" y="0" width="132" height="38" rx="19" fill="#FC5634" class="thin"/>
+      <text x="23" y="25" class="display" font-size="16" font-weight="950" fill="#FFFFFF">open source</text>
     </g>
   </g>
 
-  <g transform="translate(700 190)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <rect x="0" y="0" width="146" height="50" rx="14" fill="#172019" stroke="#365846"/>
-    <text x="20" y="31" fill="#BFFFE4" font-size="16" font-weight="700">bug autofix</text>
-    <rect x="164" y="0" width="136" height="50" rx="14" fill="#13202A" stroke="#315270"/>
-    <text x="188" y="31" fill="#C8ECFF" font-size="16" font-weight="700">SEO growth</text>
-    <rect x="318" y="0" width="162" height="50" rx="14" fill="#251E13" stroke="#654B22"/>
-    <text x="340" y="31" fill="#FFE2A6" font-size="16" font-weight="700">feedback to fix</text>
+  <g transform="translate(635 48)" filter="url(#soft)">
+    <rect x="0" y="0" width="536" height="256" rx="28" fill="#FFFAEC" class="outline"/>
+    <rect x="22" y="22" width="492" height="42" rx="18" fill="#1B1B1B"/>
+    <circle cx="48" cy="43" r="7" fill="#FC5634"/>
+    <circle cx="70" cy="43" r="7" fill="#FFD34D"/>
+    <circle cx="92" cy="43" r="7" fill="#43A047"/>
+    <text x="125" y="49" class="display" font-size="18" font-weight="900" fill="#FFF8E8">loop command center</text>
+
+    <rect x="32" y="82" width="294" height="142" rx="18" fill="#151515" stroke="#1B1B1B" stroke-width="4"/>
+    <text x="54" y="116" class="mono" font-size="17" font-weight="800" fill="#43E57C">$ win install bug-autofix</text>
+    <text x="54" y="146" class="mono" font-size="17" font-weight="800" fill="#A8E4FF">$ win tick</text>
+    <text x="54" y="176" class="mono" font-size="17" font-weight="800" fill="#FFF8E8">journal: 18 runs, 6 PRs</text>
+    <text x="54" y="206" class="mono" font-size="17" font-weight="800" fill="#FFD34D">next run: when logs spike</text>
+
+    <g transform="translate(356 84)">
+      <rect x="0" y="0" width="132" height="44" rx="12" fill="#FFFFFF" class="thin"/>
+      <text x="18" y="28" class="display" font-size="16" font-weight="950">APPROVALS</text>
+      <rect x="0" y="58" width="132" height="44" rx="12" fill="#FFE39A" class="thin"/>
+      <text x="24" y="86" class="display" font-size="16" font-weight="950">JOURNAL</text>
+      <rect x="0" y="116" width="132" height="44" rx="12" fill="#C6F2B2" class="thin"/>
+      <text x="23" y="144" class="display" font-size="16" font-weight="950">TRUST GATE</text>
+    </g>
   </g>
 
-  <g transform="translate(650 272)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
-    <text x="0" y="0" fill="#E5EEF6" font-size="18" font-weight="750">Adaptive schedule</text>
-    <text x="188" y="0" fill="#7C93A5" font-size="18">|</text>
-    <text x="216" y="0" fill="#E5EEF6" font-size="18" font-weight="750">Append-only journal</text>
-    <text x="420" y="0" fill="#7C93A5" font-size="18">|</text>
-    <text x="448" y="0" fill="#E5EEF6" font-size="18" font-weight="750">Human approvals</text>
+  <g transform="translate(1148 236)">
+    <ellipse cx="54" cy="70" rx="72" ry="16" fill="#2F8F3E" opacity="0.35"/>
+    <rect x="18" y="28" width="72" height="58" rx="18" fill="#FFF8E8" class="outline"/>
+    <rect x="28" y="0" width="52" height="44" rx="14" fill="#FFFFFF" class="outline"/>
+    <circle cx="45" cy="22" r="5" fill="#1B1B1B"/>
+    <circle cx="64" cy="22" r="5" fill="#1B1B1B"/>
+    <path d="M45 37C51 42 59 42 65 37" class="thin"/>
+    <path d="M30 17L16 5M76 17L91 5" class="thin"/>
+    <circle cx="14" cy="4" r="5" fill="#FC5634" class="thin"/>
+    <circle cx="93" cy="4" r="5" fill="#FC5634" class="thin"/>
+    <path d="M36 72H72" class="thin"/>
   </g>
+
+  <g transform="translate(709 272) rotate(-5)">
+    <rect x="0" y="0" width="126" height="42" rx="9" fill="#FC5634" class="thin"/>
+    <text x="20" y="27" class="display" font-size="17" font-weight="950" fill="#FFFFFF">SEO LOOP</text>
+    <path d="M62 42V72" class="thin"/>
+  </g>
+
+  <g transform="translate(467 272) rotate(4)">
+    <rect x="0" y="0" width="158" height="42" rx="9" fill="#FFFFFF" class="thin"/>
+    <text x="18" y="27" class="display" font-size="17" font-weight="950">BUG AUTOFIX</text>
+    <path d="M79 42V74" class="thin"/>
+  </g>
+
+  <g transform="translate(50 299)">
+    <path d="M0 0H210" stroke="#1B1B1B" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="32" cy="0" r="7" fill="#FFD34D" class="thin"/>
+    <circle cx="92" cy="0" r="7" fill="#FC5634" class="thin"/>
+    <circle cx="156" cy="0" r="7" fill="#43A047" class="thin"/>
+  </g>
+
+  <rect x="2.5" y="2.5" width="1275" height="355" rx="27.5" stroke="#1B1B1B" stroke-width="5"/>
 </svg>
