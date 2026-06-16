@@ -1,17 +1,41 @@
 {
-  "name": "win-loops",
+  "name": "@win.sh/win",
   "version": "0.1.0",
-  "description": "Open-source business improvement loops for AI agents and win.sh.",
+  "description": "Open-source business improvement loops, terminal harness, and win.sh connector contracts for AI agents.",
   "type": "module",
   "bin": {
+    "win": "bin/win-loops.js",
     "win-loops": "bin/win-loops.js"
   },
+  "files": [
+    "bin",
+    "src",
+    "loops",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "PROGRESS.md"
+  ],
   "scripts": {
     "test": "node --test tests/*.test.js",
     "eval": "node bin/win-loops.js eval",
-    "check": "npm test && npm run eval"
+    "check": "npm test && npm run eval",
+    "pack:dry": "npm pack --dry-run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/win-sh/win.git"
+  },
+  "bugs": {
+    "url": "https://github.com/win-sh/win/issues"
+  },
+  "homepage": "https://github.com/win-sh/win#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "keywords": [
+    "win.sh",
     "agents",
     "codex",
     "claude-code",

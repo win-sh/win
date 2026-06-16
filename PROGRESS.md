@@ -36,6 +36,13 @@ Last updated: 2026-06-16
 - Added `artifact-suggestions.jsonl` state plus journal entries for suggested proof.
 - Added local Sentry/GitHub connector snapshot support for `bug-autofix`.
 - Added CLI support for `win-loops run bug-autofix --connector-fixture <path>`.
+- Added connector snapshot support for `seo-growth` and `feedback-to-fix`.
+- Added terminal auth commands: `auth login`, `auth status`, `auth token`, and `auth logout`.
+- Added browser approval callback support for win.sh Settings API tokens.
+- Added hosted connector snapshot fetch command: `snapshot fetch <loop>`.
+- Added publish-ready package metadata for `@win.sh/win` and GitHub `win-sh/win`.
+- Added GitHub Actions CI and npm dry-pack checks.
+- Added full win.sh product, terminal auth, connector, and publishing docs.
 
 ## Current Quality Gates
 
@@ -45,13 +52,12 @@ Last updated: 2026-06-16
 
 ## Next Work
 
-- Add connector snapshot adapters for `seo-growth` and `feedback-to-fix`.
-- Add live connector clients behind the snapshot contracts.
-- Add richer deterministic evals per loop, beyond contract validation.
-- Add MCP server surface for Codex/Claude integration.
-- Add hosted win.sh importer and loop dashboard.
-- Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
-- Add GitHub Actions CI after repo is published.
+- Push to `github.com/win-sh/win.git` once the org repo exists.
+- Publish `@win.sh/win` once npm org access is configured.
+- Implement hosted win.sh Settings UI and connector snapshot API against the documented contracts.
+- Add richer deterministic evals per individual loop as loops graduate to production autonomy.
+- Add MCP server surface for Codex/Claude if direct MCP integration becomes preferable to CLI handoff.
+- Add launchd/systemd wrappers if users want a daemon instead of cron or hosted scheduling.
 
 ## First Production Candidate
 

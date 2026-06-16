@@ -53,6 +53,22 @@ node /Users/romainsimon/dev/win-loops/bin/win-loops.js run bug-autofix \
 
 The connector fixture path is the local stand-in for hosted OAuth connectors. It lets the loop normalize Sentry issue data, impacted paying users, GitHub codeowners, and recent commits before creating the run brief.
 
+Fetch a connector snapshot from hosted win.sh:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js auth login
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js snapshot fetch bug-autofix \
+  --output /path/to/repo/.win/snapshots/bug-autofix.json
+```
+
+`auth login` opens win.sh Settings in the browser, asks the user to approve a CLI token, and stores the token locally. For CI or manual setup:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js auth login \
+  --token <token> \
+  --workspace <workspace>
+```
+
 Then ask the agent:
 
 ```text

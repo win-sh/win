@@ -1,4 +1,4 @@
-# win-loops
+# win
 
 Open-source business improvement loops for AI agents and win.sh.
 
@@ -26,6 +26,13 @@ Each loop has:
 npm test
 npm run eval
 node bin/win-loops.js list
+```
+
+Published package target:
+
+```bash
+npm install -g @win.sh/win
+win list
 ```
 
 Install a loop into another repo:
@@ -59,6 +66,26 @@ node bin/win-loops.js run bug-autofix \
 ```
 
 Connector snapshots are deterministic JSON payloads shaped like hosted connector output. For `bug-autofix`, the adapter normalizes Sentry issue data, affected users, stack frames, GitHub codeowners, and recent commits into one scoped run brief.
+
+Production connector snapshot examples exist for:
+
+```bash
+node bin/win-loops.js run seo-growth \
+  --repo /path/to/app \
+  --connector-fixture loops/seo-growth/examples/connector-snapshot.json
+
+node bin/win-loops.js run feedback-to-fix \
+  --repo /path/to/app \
+  --connector-fixture loops/feedback-to-fix/examples/connector-snapshot.json
+```
+
+Connect the terminal to hosted win.sh:
+
+```bash
+node bin/win-loops.js auth login
+node bin/win-loops.js auth status
+node bin/win-loops.js snapshot fetch bug-autofix
+```
 
 Then ask Codex or Claude Code to execute the generated run brief under `.win/runs/`.
 
@@ -195,8 +222,21 @@ win-loops outcome record <run-id> [--repo <path>] --status <status> [--metric <m
 win-loops approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
 win-loops approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]
 win-loops approval reject <approval-id> [--repo <path>] [--by <text>] [--note <text>]
+win-loops auth login [--token <token>] [--workspace <name>] [--app-url <url>] [--api-url <url>] [--config-dir <path>] [--no-open] [--print-url]
+win-loops auth status [--config-dir <path>]
+win-loops auth token [--config-dir <path>]
+win-loops auth logout [--config-dir <path>]
+win-loops snapshot fetch <loop> [--config-dir <path>] [--api-url <url>] [--token <token>] [--output <path>]
 win-loops eval
 ```
+
+## Documentation
+
+- [win.sh product and terminal docs](docs/winsh.md)
+- [local install](docs/local-install.md)
+- [hosted win.sh integration](docs/hosted-winsh.md)
+- [loop format](docs/loop-format.md)
+- [publishing](docs/publishing.md)
 
 ## Quality Gates
 
@@ -206,4 +246,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, connector snapshots, operator inboxes, executor dry-runs and execution capture, artifact suggestions, reporting commands, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, connector snapshots, terminal auth, hosted snapshot fetching, operator inboxes, executor dry-runs and execution capture, artifact suggestions, reporting commands, CLI flows, and journal writes.

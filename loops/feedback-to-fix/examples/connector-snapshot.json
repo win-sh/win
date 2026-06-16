@@ -1,0 +1,118 @@
+{
+  "support": {
+    "threads": [
+      {
+        "id": "thr_1001",
+        "source": "intercom",
+        "customerId": "cus_team_42",
+        "subject": "Export keeps failing",
+        "status": "open",
+        "createdAt": "2026-06-15T14:20:00.000Z",
+        "messages": [
+          {
+            "author": "customer",
+            "body": "The CSV export fails every time I filter by campaign. We need this for Monday reporting."
+          },
+          {
+            "author": "support",
+            "body": "Can you retry from the exports page?"
+          },
+          {
+            "author": "customer",
+            "body": "Retrying did not help. It still says export failed after about 30 seconds."
+          }
+        ],
+        "tags": [
+          "export",
+          "reporting"
+        ]
+      },
+      {
+        "id": "thr_1002",
+        "source": "email",
+        "customerId": "cus_team_77",
+        "subject": "CSV export error",
+        "status": "open",
+        "createdAt": "2026-06-16T09:05:00.000Z",
+        "messages": [
+          {
+            "author": "customer",
+            "body": "Campaign CSV export is broken for our paid workspace."
+          }
+        ],
+        "tags": [
+          "export"
+        ]
+      },
+      {
+        "id": "thr_1003",
+        "source": "review",
+        "customerId": "cus_free_13",
+        "subject": "Reporting export",
+        "status": "open",
+        "createdAt": "2026-06-16T10:00:00.000Z",
+        "messages": [
+          {
+            "author": "customer",
+            "body": "Export failed twice when I filtered reporting by campaign."
+          }
+        ],
+        "tags": [
+          "export",
+          "campaign-filter"
+        ]
+      }
+    ]
+  },
+  "customers": [
+    {
+      "id": "cus_team_42",
+      "plan": "team",
+      "mrr": 399,
+      "segment": "agency",
+      "lifecycle": "active"
+    },
+    {
+      "id": "cus_team_77",
+      "plan": "team",
+      "mrr": 299,
+      "segment": "ecommerce",
+      "lifecycle": "active"
+    },
+    {
+      "id": "cus_free_13",
+      "plan": "free",
+      "mrr": 0,
+      "segment": "prosumer",
+      "lifecycle": "trial"
+    }
+  ],
+  "analytics": {
+    "workflow": "campaign_csv_export",
+    "failureRate": 0.42,
+    "baselineFailureRate": 0.04,
+    "affectedAccounts": 18
+  },
+  "github": {
+    "repository": {
+      "fullName": "win-sh/app",
+      "defaultBranch": "main"
+    },
+    "existingIssues": [
+      {
+        "number": 241,
+        "title": "CSV export timeout when campaign filter is selected",
+        "state": "open",
+        "url": "https://github.com/win-sh/app/issues/241",
+        "labels": [
+          "bug",
+          "exports"
+        ]
+      }
+    ],
+    "candidateFiles": [
+      "src/exports/campaignCsv.ts",
+      "src/app/api/exports/campaign/route.ts"
+    ]
+  }
+}

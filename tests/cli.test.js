@@ -73,6 +73,70 @@ test('CLI run bug-autofix --connector-fixture creates a run from Sentry and GitH
   }
 })
 
+test('CLI run seo-growth --connector-fixture creates a run from GSC and competitor snapshots', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-seo-connector-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'seo-growth', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'seo-growth',
+      '--repo',
+      target,
+      '--connector-fixture',
+      'loops/seo-growth/examples/connector-snapshot.json'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const run = JSON.parse(stdout)
+    const brief = await readFile(join(target, '.win', 'runs', `${run.id}.md`), 'utf8')
+
+    assert.match(brief, /Connector Evidence/)
+    assert.match(brief, /ai video generator for ads/)
+    assert.match(brief, /ranking-improvement/)
+    assert.match(brief, /verify after 21 days/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+test('CLI run feedback-to-fix --connector-fixture creates a run from support snapshots', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-feedback-connector-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'feedback-to-fix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'feedback-to-fix',
+      '--repo',
+      target,
+      '--connector-fixture',
+      'loops/feedback-to-fix/examples/connector-snapshot.json'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const run = JSON.parse(stdout)
+    const brief = await readFile(join(target, '.win', 'runs', `${run.id}.md`), 'utf8')
+
+    assert.match(brief, /Representative Quotes/)
+    assert.match(brief, /CSV export fails every time/)
+    assert.match(brief, /Draft Customer Reply/)
+    assert.match(brief, /Do not send/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
 test('CLI tick shows scheduled loop actions and writes due run briefs', async () => {
   const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-tick-'))
 

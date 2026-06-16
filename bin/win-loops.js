@@ -1,12 +1,22 @@
 #!/usr/bin/env node
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import {
+  clearAuth,
+  loginWithBrowser,
+  readAuth,
+  renderAuthStatus,
+  saveAuth
+} from '../src/auth.js'
 import { loadCatalog, loadLoop } from '../src/catalog.js'
+import { fetchConnectorSnapshot, writeConnectorSnapshot } from '../src/cloud.js'
 import { validateCatalog } from '../src/eval.js'
 import { buildExecPlan, executeExecPlan, renderExecPlan } from '../src/executor.js'
 import { buildInbox, pickNextAction, renderInbox, renderNextAction } from '../src/inbox.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal, buildBugAutofixSignalFromConnectors } from '../src/loops/bug-autofix.js'
+import { buildFeedbackToFixSignalFromConnectors } from '../src/loops/feedback-to-fix.js'
+import { buildSeoGrowthSignalFromConnectors } from '../src/loops/seo-growth.js'
 import {
   acceptArtifactSuggestion,
   listArtifactSuggestions,
@@ -71,6 +81,10 @@ async function run(command, args) {
       return outcome(args)
     case 'approval':
       return approval(args)
+    case 'auth':
+      return auth(args)
+    case 'snapshot':
+      return snapshot(args)
     case 'eval':
       return evalCatalog()
     case 'help':
@@ -133,6 +147,12 @@ async function resolveSignal({ loopId, fixtureFile, connectorFixtureFile, signal
     const snapshot = JSON.parse(await readFile(resolve(connectorFixtureFile), 'utf8'))
     if (loopId === 'bug-autofix') {
       return buildBugAutofixSignalFromConnectors(snapshot).runBrief
+    }
+    if (loopId === 'seo-growth') {
+      return buildSeoGrowthSignalFromConnectors(snapshot).runBrief
+    }
+    if (loopId === 'feedback-to-fix') {
+      return buildFeedbackToFixSignalFromConnectors(snapshot).runBrief
     }
     return JSON.stringify(snapshot, null, 2)
   }
@@ -287,6 +307,69 @@ async function approval(args) {
   })
 }
 
+async function auth(args) {
+  const subcommand = readArg(args, 0, 'auth subcommand')
+  const configDir = readOption(args, '--config-dir') || undefined
+
+  if (subcommand === 'login') {
+    const token = readOption(args, '--token')
+    const workspace = readOption(args, '--workspace') || ''
+    const apiUrl = readOption(args, '--api-url') || 'https://api.win.sh'
+    const appUrl = readOption(args, '--app-url') || 'https://win.sh'
+
+    if (token) {
+      const auth = await saveAuth({ configDir, token, workspace, apiUrl, appUrl })
+      return `Saved win.sh token for ${auth.workspace || 'default workspace'}.\n`
+    }
+
+    const auth = await loginWithBrowser({
+      configDir,
+      appUrl,
+      apiUrl,
+      port: Number(readOption(args, '--port') || 0),
+      timeoutMs: Number(readOption(args, '--timeout-ms') || 120000),
+      openBrowser: !args.includes('--no-open'),
+      printUrl: args.includes('--print-url')
+    })
+    return `Saved win.sh token for ${auth.workspace || 'default workspace'}.\n`
+  }
+
+  if (subcommand === 'status') {
+    return renderAuthStatus(await readAuth({ configDir }))
+  }
+
+  if (subcommand === 'token') {
+    const auth = await readAuth({ configDir })
+    if (!auth?.token) throw new Error('Not logged in')
+    return `${auth.token}\n`
+  }
+
+  if (subcommand === 'logout') {
+    await clearAuth({ configDir })
+    return 'Logged out.\n'
+  }
+
+  throw new Error(`Unknown auth command: ${subcommand}`)
+}
+
+async function snapshot(args) {
+  const subcommand = readArg(args, 0, 'snapshot subcommand')
+  if (subcommand !== 'fetch') throw new Error(`Unknown snapshot command: ${subcommand}`)
+
+  const loopId = readArg(args, 1, 'loop id')
+  const snapshot = await fetchConnectorSnapshot({
+    loopId,
+    configDir: readOption(args, '--config-dir') || undefined,
+    apiUrl: readOption(args, '--api-url') || undefined,
+    token: readOption(args, '--token') || undefined
+  })
+  await writeConnectorSnapshot({
+    output: readOption(args, '--output') || '',
+    snapshot
+  })
+  return snapshot
+}
+
 async function evalCatalog() {
   const catalog = await loadCatalog()
   const report = await validateCatalog(catalog)
@@ -335,6 +418,11 @@ Commands:
   approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
   approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]
   approval reject <approval-id> [--repo <path>] [--by <text>] [--note <text>]
+  auth login [--token <token>] [--workspace <name>] [--app-url <url>] [--api-url <url>] [--config-dir <path>] [--no-open] [--print-url]
+  auth status [--config-dir <path>]
+  auth token [--config-dir <path>]
+  auth logout [--config-dir <path>]
+  snapshot fetch <loop> [--config-dir <path>] [--api-url <url>] [--token <token>] [--output <path>]
   eval
 `
 }

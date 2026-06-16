@@ -1,0 +1,81 @@
+{
+  "gsc": {
+    "property": "https://www.melies.ai/",
+    "window": {
+      "current": "2026-06-01..2026-06-14",
+      "previous": "2026-05-18..2026-05-31"
+    },
+    "rows": [
+      {
+        "page": "https://www.melies.ai/ai-video-generator",
+        "query": "ai video generator for ads",
+        "country": "usa",
+        "device": "desktop",
+        "clicks": 42,
+        "previousClicks": 31,
+        "impressions": 4200,
+        "previousImpressions": 3900,
+        "ctr": 0.01,
+        "previousCtr": 0.0079,
+        "position": 7.4,
+        "previousPosition": 8.8
+      },
+      {
+        "page": "https://www.melies.ai/ai-video-generator",
+        "query": "make product ad videos with ai",
+        "country": "usa",
+        "device": "mobile",
+        "clicks": 18,
+        "previousClicks": 14,
+        "impressions": 2100,
+        "previousImpressions": 1800,
+        "ctr": 0.0085,
+        "previousCtr": 0.0078,
+        "position": 11.2,
+        "previousPosition": 12.5
+      }
+    ]
+  },
+  "site": {
+    "pages": [
+      {
+        "url": "https://www.melies.ai/ai-video-generator",
+        "title": "AI Video Generator",
+        "meta": "Generate product videos with AI.",
+        "h1": "AI Video Generator",
+        "updatedAt": "2026-05-02T10:00:00.000Z",
+        "internalLinks": [
+          "https://www.melies.ai/templates",
+          "https://www.melies.ai/pricing"
+        ],
+        "schema": [
+          "SoftwareApplication"
+        ]
+      }
+    ]
+  },
+  "competitors": [
+    {
+      "url": "https://www.creativebench.com/ai-ad-video-generator",
+      "title": "AI Ad Video Generator for Product Teams",
+      "position": 3,
+      "pattern": "ad-specific title, product examples, short FAQ"
+    },
+    {
+      "url": "https://www.motionkit.io/product-video-ai",
+      "title": "Product Video AI Maker",
+      "position": 5,
+      "pattern": "template gallery and proof above the fold"
+    }
+  ],
+  "github": {
+    "repository": {
+      "fullName": "win-sh/site",
+      "defaultBranch": "main"
+    },
+    "candidateFiles": [
+      "app/(marketing)/ai-video-generator/page.tsx",
+      "content/ai-video-generator/faq.ts"
+    ]
+  }
+}
