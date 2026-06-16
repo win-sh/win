@@ -27,6 +27,8 @@ Last updated: 2026-06-16
 - Added `artifacts.jsonl` plus run updates and journal entries for reporting events.
 - Added approval decision commands: `approval approve` and `approval reject`.
 - Added scheduler resumption for approved approvals via `trigger: "approval"` run briefs.
+- Added operator inbox command: `win-loops inbox --repo <path>`.
+- Added next-action command: `win-loops next --repo <path>`.
 
 ## Current Quality Gates
 
@@ -40,7 +42,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Add approval inbox/listing command for pending decisions.
+- Add executor bridge: `win-loops exec --agent codex|claude-code` with dry-run first.
 - Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
 - Add GitHub Actions CI after repo is published.
 

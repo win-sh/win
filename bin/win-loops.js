@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
+import { buildInbox, pickNextAction, renderInbox, renderNextAction } from '../src/inbox.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
 import {
@@ -41,6 +42,10 @@ async function run(command, args) {
       return runLoop(args)
     case 'status':
       return status(args)
+    case 'inbox':
+      return inbox(args)
+    case 'next':
+      return next(args)
     case 'tick':
       return tick(args)
     case 'enable':
@@ -139,6 +144,18 @@ async function status(args) {
   const rows = await getInstalledLoopStatus({ targetRepo })
   if (rows.length === 0) return 'No loops installed.\n'
   return renderStatusTable(rows)
+}
+
+async function inbox(args) {
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const report = await buildInbox({ targetRepo })
+  return renderInbox(report)
+}
+
+async function next(args) {
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const report = await buildInbox({ targetRepo })
+  return renderNextAction(pickNextAction(report))
 }
 
 async function tick(args) {
@@ -248,6 +265,8 @@ Commands:
   install <loop> [--repo <path>] [--agent codex|claude-code]
   run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>]
   status [--repo <path>]
+  inbox [--repo <path>]
+  next [--repo <path>]
   tick [--repo <path>]
   enable <loop> [--repo <path>]
   disable <loop> [--repo <path>]

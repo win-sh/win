@@ -67,6 +67,15 @@ bug-autofix  enabled   diagnosing  2026-06-16T14:00:00.000Z  4h 30m     2026-06-
 seo-growth   disabled  watching    -                         not scheduled  -
 ```
 
+Show the operator inbox and next action:
+
+```bash
+node bin/win-loops.js inbox --repo /path/to/app
+node bin/win-loops.js next --repo /path/to/app
+```
+
+`inbox` summarizes pending executions, approvals, approved actions waiting for scheduler resume, overdue outcome checks, and latest proof per loop. `next` prints the single highest-priority operator action.
+
 Run one local scheduler pass:
 
 ```bash
@@ -151,6 +160,8 @@ win-loops inspect <loop>
 win-loops install <loop> [--repo <path>] [--agent codex|claude-code]
 win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
 win-loops status [--repo <path>]
+win-loops inbox [--repo <path>]
+win-loops next [--repo <path>]
 win-loops tick [--repo <path>]
 win-loops enable <loop> [--repo <path>]
 win-loops disable <loop> [--repo <path>]
@@ -172,4 +183,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, reporting commands, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, reporting commands, CLI flows, and journal writes.

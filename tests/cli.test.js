@@ -196,3 +196,81 @@ test('CLI reporting commands attach artifacts, outcomes, and approvals to a run'
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI inbox and next show the operator work queue', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-inbox-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: runStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Checkout crash repeated 21 times.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const run = JSON.parse(runStdout)
+
+    const { stdout: approvalStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'approval',
+      'request',
+      run.id,
+      '--repo',
+      target,
+      '--action',
+      'Merge PR',
+      '--reason',
+      'Touches checkout.',
+      '--risk',
+      'medium'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const approval = JSON.parse(approvalStdout)
+
+    await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Investigate separate checkout warning.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: inboxStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'inbox',
+      '--repo',
+      target
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.match(inboxStdout, /Operator Inbox/)
+    assert.match(inboxStdout, /approval/)
+    assert.match(inboxStdout, /execution/)
+
+    const { stdout: nextStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'next',
+      '--repo',
+      target
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.match(nextStdout, new RegExp(approval.id))
+    assert.match(nextStdout, /approval approve/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})

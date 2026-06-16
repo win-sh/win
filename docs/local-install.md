@@ -105,6 +105,15 @@ Show installed loops:
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js status --repo /path/to/repo
 ```
 
+Show operator work:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js inbox --repo /path/to/repo
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js next --repo /path/to/repo
+```
+
+`inbox` shows pending executions, pending approvals, approved actions waiting for `tick`, overdue outcome checks, and latest loop context. `next` prints the single next action to take.
+
 Enable or disable a loop:
 
 ```bash
