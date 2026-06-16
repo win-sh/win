@@ -1,35 +1,55 @@
+![win.sh business loops for AI agents](https://raw.githubusercontent.com/win-sh/win/main/assets/readme-banner.svg)
+
 # win
 
-[![CI](https://github.com/win-sh/win/actions/workflows/ci.yml/badge.svg)](https://github.com/win-sh/win/actions/workflows/ci.yml)
+[![CI](https://github.com/win-sh/win/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/win-sh/win/actions/workflows/ci.yml?query=branch%3Amain)
 [![npm](https://img.shields.io/npm/v/@win.sh/win?color=111827)](https://www.npmjs.com/package/@win.sh/win)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Business improvement loops for AI agents.
+**Open-source business improvement loops for Codex, Claude Code, and hosted win.sh.**
 
-`win` turns repeatable business work into inspectable Markdown loops that Codex, Claude Code, or hosted win.sh can execute: fix production bugs, grow SEO traffic, process customer feedback, optimize ads, watch conversion, follow up outcomes, and remember what worked.
+`win` turns business signals into repeatable agent runs: watch the signal, decide if action is worth it, write a scoped brief, let an agent execute, capture proof, verify the outcome, update the journal, and schedule the next useful run.
+
+It is not another chat wrapper. It is the operating memory around AI agents so they can improve products, growth, support, and operations over time.
 
 ```bash
 npm install -g @win.sh/win
 win list
 ```
 
-Local-first. Hosted-ready. No black box.
+Local-first. Markdown-native. Hosted-ready.
 
 When working from a source checkout before the package is installed globally, use `node bin/win-loops.js` in place of `win`.
 
-## Why win?
+## What It Does
 
-Most agent automations are cron jobs with a prompt attached. Real business work is a loop:
+Most automations are fixed cron jobs with a fixed prompt. Real business work is a loop.
 
-1. Watch the right signal.
-2. Decide whether action is worth it.
-3. Create a scoped run brief.
-4. Let an agent execute inside authority rules.
-5. Capture artifacts and approvals.
-6. Verify the metric later.
-7. Update memory and schedule the next useful run.
+| Cron task | win loop |
+| --- | --- |
+| Runs at a fixed time | Chooses the next useful run time after every execution |
+| Runs the same script every time | Uses a readable `SKILL.md` that can adapt to the current signal |
+| Usually fire-and-forget | Records briefs, artifacts, approvals, outcomes, and journals |
+| Hard to inspect later | Stores everything as files in the target repo |
+| Good for mechanical jobs | Built for business cases where judgment matters |
 
-`win` packages those loops as files you can read, version, install, run locally, and later hand to hosted win.sh.
+Examples:
+
+| Loop | Watches | Produces |
+| --- | --- | --- |
+| `bug-autofix` | Sentry/log errors, impacted customers, GitHub context | scoped fix brief, agent handoff, PR/test proof |
+| `seo-growth` | Google Search Console, page metadata, competitors | content or technical SEO action with verification window |
+| `feedback-to-fix` | support threads, revenue at risk, analytics, issues | bug/feature/docs decision plus reply draft |
+| `conversion-optimizer` | funnel metrics and benchmarks | test hypothesis, implementation brief, outcome check |
+| `ads-budget-guard` | spend, CAC, creative performance | pause/scale/test decision with approval boundary |
+
+## Why Teams Use It
+
+- Give Codex or Claude Code business context, not just one-off tasks.
+- Keep every agent decision inspectable in Markdown and JSONL.
+- Add approval boundaries before agents merge code, publish content, spend money, or contact customers.
+- Run locally with your own agent subscription, then move the same loop contracts to hosted win.sh when you need scheduling, connectors, dashboards, and team governance.
+- Build custom loops as readable files instead of opaque workflow graphs.
 
 ## Open Source vs Hosted
 
@@ -42,31 +62,26 @@ Most agent automations are cron jobs with a prompt attached. Real business work 
 
 The loop logic stays open and portable. Hosted win.sh is the managed operating layer around the same contracts.
 
-## win is right for you if
+## Quick Start
 
-- you already use Codex, Claude Code, or another coding agent
-- you want agents to improve business metrics, not just finish one-off tasks
-- you want every decision, artifact, approval, and outcome to be inspectable
-- you need authority boundaries before agents touch code, content, customers, or spend
-- you want a path from local automation to hosted team workflows
+From npm:
 
-## win is not
+```bash
+npm install -g @win.sh/win
+win list
+```
 
-- a general task manager for humans
-- a replacement for Codex or Claude Code
-- a black-box agent platform
-- a promise that agents should merge, publish, spend, or email customers without approval
-
-## 60-Second Start
+From source:
 
 ```bash
 git clone https://github.com/win-sh/win.git
 cd win
 npm install
 npm run check
+node bin/win-loops.js list
 ```
 
-Install the first production loop into an app repo:
+Install a loop into an app repo:
 
 ```bash
 win install bug-autofix --repo /path/to/app --agent codex
@@ -80,9 +95,10 @@ win run bug-autofix \
   --connector-fixture loops/bug-autofix/examples/connector-snapshot.json
 ```
 
-Ask the local agent what to do next:
+Ask what the operator or agent should do next:
 
 ```bash
+win status --repo /path/to/app
 win next --repo /path/to/app
 win exec --repo /path/to/app --agent codex --dry-run
 ```
@@ -93,7 +109,7 @@ Execute and capture output:
 win exec --repo /path/to/app --agent codex --run <run-id>
 ```
 
-Review proof suggested from the execution log:
+Accept proof suggested from the execution log:
 
 ```bash
 win artifact suggestions --repo /path/to/app
@@ -104,8 +120,8 @@ win artifact accept <suggestion-id> --repo /path/to/app
 
 - 50 readable loop packs across engineering, SEO, growth, ads, customer, sales, finance, product, and ops.
 - Production-grade starter loops for `bug-autofix`, `seo-growth`, and `feedback-to-fix`.
-- Local terminal dashboard with enabled state, current status, next run time, countdown, and last run.
-- Adaptive scheduling: cron can wake the process, but each loop chooses the next useful run date.
+- A terminal dashboard with enabled state, current status, next run time, countdown, and last run.
+- Adaptive scheduling: cron can wake the process, but each loop decides when it is useful to run again.
 - Append-only loop journals.
 - Run briefs under `.win/runs/`.
 - Execution logs under `.win/executions/`.
@@ -113,86 +129,6 @@ win artifact accept <suggestion-id> --repo /path/to/app
 - Approval and outcome tracking.
 - Connector snapshot contracts for hosted win.sh.
 - Browser-based terminal auth for hosted win.sh API tokens.
-
-## Production Loops
-
-### Bug Autofix
-
-Turns Sentry/log errors and GitHub context into scoped fix briefs.
-
-```bash
-win run bug-autofix \
-  --repo /path/to/app \
-  --connector-fixture loops/bug-autofix/examples/connector-snapshot.json
-```
-
-The adapter normalizes:
-
-- Sentry issue metadata and sample events
-- impacted paying users
-- stack frames and affected routes
-- GitHub codeowners and recent commits
-
-### SEO Growth
-
-Turns GSC, page, competitor, and repo context into one SEO action.
-
-```bash
-win run seo-growth \
-  --repo /path/to/site \
-  --connector-fixture loops/seo-growth/examples/connector-snapshot.json
-```
-
-The adapter normalizes:
-
-- GSC page/query metrics
-- target page metadata
-- competitor SERP patterns
-- candidate website files
-- verification window
-
-### Feedback To Fix
-
-Turns support threads, customer value, analytics, and GitHub context into a fix, issue, docs change, or reply draft.
-
-```bash
-win run feedback-to-fix \
-  --repo /path/to/app \
-  --connector-fixture loops/feedback-to-fix/examples/connector-snapshot.json
-```
-
-The adapter normalizes:
-
-- representative user quotes
-- classification
-- affected paying users and revenue at risk
-- existing GitHub issues
-- candidate files
-- customer reply draft with approval boundary
-
-## Local State
-
-Installing a loop writes inspectable state into the target repo:
-
-```text
-.win/
-  loops/<loop-id>/LOOP.md
-  loops/<loop-id>/journal.md
-  loops/<loop-id>/state.json
-  runs/<run-id>.md
-  executions/<execution-id>.log
-  state/runs.jsonl
-  state/executions.jsonl
-  state/artifacts.jsonl
-  state/artifact-suggestions.jsonl
-  state/outcomes.jsonl
-  state/approvals.jsonl
-
-.agents/
-  skills/win-<loop-id>/SKILL.md
-```
-
-Nothing is hidden. You can inspect, diff, commit, back up, or migrate every important decision.
 
 ## Terminal Dashboard
 
@@ -223,6 +159,68 @@ win tick --repo /path/to/app
 ```
 
 `tick` creates run briefs only for enabled loops whose adaptive `nextRunAt` is due. It also resumes approved actions before normal scheduled work.
+
+## Production Loops
+
+### Bug Autofix
+
+Turns Sentry/log errors and GitHub context into scoped fix briefs.
+
+```bash
+win run bug-autofix \
+  --repo /path/to/app \
+  --connector-fixture loops/bug-autofix/examples/connector-snapshot.json
+```
+
+The adapter normalizes Sentry issue metadata, sample events, impacted paying users, stack frames, affected routes, GitHub codeowners, and recent commits.
+
+### SEO Growth
+
+Turns GSC, page, competitor, and repo context into one SEO action.
+
+```bash
+win run seo-growth \
+  --repo /path/to/site \
+  --connector-fixture loops/seo-growth/examples/connector-snapshot.json
+```
+
+The adapter normalizes GSC page/query metrics, target page metadata, competitor SERP patterns, candidate website files, and the verification window.
+
+### Feedback To Fix
+
+Turns support threads, customer value, analytics, and GitHub context into a fix, issue, docs change, or reply draft.
+
+```bash
+win run feedback-to-fix \
+  --repo /path/to/app \
+  --connector-fixture loops/feedback-to-fix/examples/connector-snapshot.json
+```
+
+The adapter normalizes representative user quotes, classification, affected paying users, revenue at risk, existing issues, candidate files, and customer reply drafts.
+
+## Local State
+
+Installing a loop writes inspectable state into the target repo:
+
+```text
+.win/
+  loops/<loop-id>/LOOP.md
+  loops/<loop-id>/journal.md
+  loops/<loop-id>/state.json
+  runs/<run-id>.md
+  executions/<execution-id>.log
+  state/runs.jsonl
+  state/executions.jsonl
+  state/artifacts.jsonl
+  state/artifact-suggestions.jsonl
+  state/outcomes.jsonl
+  state/approvals.jsonl
+
+.agents/
+  skills/win-<loop-id>/SKILL.md
+```
+
+Nothing is hidden. You can inspect, diff, commit, back up, or migrate every important decision.
 
 ## Hosted win.sh
 
@@ -334,19 +332,7 @@ npm run check
 npm run pack:dry
 ```
 
-Current coverage includes:
-
-- loop parsing and catalog validation
-- installation into target repos
-- run brief creation
-- adaptive scheduling and tick behavior
-- connector snapshots
-- terminal auth
-- hosted snapshot fetching
-- operator inbox and next actions
-- executor dry-runs and execution capture
-- artifact suggestions
-- approvals, outcomes, and journal writes
+Current coverage includes loop parsing, catalog validation, installation into target repos, run brief creation, adaptive scheduling, connector snapshots, terminal auth, hosted snapshot fetching, operator queues, executor dry-runs, execution capture, artifact suggestions, approvals, outcomes, and journal writes.
 
 ## Documentation
 
@@ -355,32 +341,6 @@ Current coverage includes:
 - [hosted win.sh integration](docs/hosted-winsh.md)
 - [loop format](docs/loop-format.md)
 - [publishing](docs/publishing.md)
-
-## Publishing
-
-Target GitHub repo:
-
-```text
-https://github.com/win-sh/win.git
-```
-
-Target npm package:
-
-```text
-@win.sh/win
-```
-
-Dry run:
-
-```bash
-npm run pack:dry
-```
-
-Publish:
-
-```bash
-npm publish --access public --provenance
-```
 
 ## License
 
