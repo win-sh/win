@@ -29,6 +29,7 @@ Last updated: 2026-06-16
 - Added scheduler resumption for approved approvals via `trigger: "approval"` run briefs.
 - Added operator inbox command: `win-loops inbox --repo <path>`.
 - Added next-action command: `win-loops next --repo <path>`.
+- Added executor dry-run command: `win-loops exec --agent codex|claude-code --dry-run`.
 
 ## Current Quality Gates
 
@@ -42,7 +43,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Add executor bridge: `win-loops exec --agent codex|claude-code` with dry-run first.
+- Add real executor process spawning and report-back capture.
 - Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
 - Add GitHub Actions CI after repo is published.
 

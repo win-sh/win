@@ -110,9 +110,10 @@ Show operator work:
 ```bash
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js inbox --repo /path/to/repo
 node /Users/romainsimon/dev/win-loops/bin/win-loops.js next --repo /path/to/repo
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js exec --repo /path/to/repo --agent codex --dry-run
 ```
 
-`inbox` shows pending executions, pending approvals, approved actions waiting for `tick`, overdue outcome checks, and latest loop context. `next` prints the single next action to take.
+`inbox` shows pending executions, pending approvals, approved actions waiting for `tick`, overdue outcome checks, and latest loop context. `next` prints the single next action to take. `exec --dry-run` prints the agent prompt and command hint for the next executable run brief.
 
 Enable or disable a loop:
 

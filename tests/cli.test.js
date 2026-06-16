@@ -274,3 +274,45 @@ test('CLI inbox and next show the operator work queue', async () => {
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI exec --dry-run renders an agent handoff for the next executable run', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-exec-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: runStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Checkout crash repeated 21 times.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const run = JSON.parse(runStdout)
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'exec',
+      '--repo',
+      target,
+      '--agent',
+      'codex',
+      '--dry-run'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    assert.match(stdout, /Dry Run/)
+    assert.match(stdout, /codex /)
+    assert.match(stdout, /Use the win-bug-autofix skill/)
+    assert.match(stdout, new RegExp(`\\.win/runs/${run.id}\\.md`))
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
