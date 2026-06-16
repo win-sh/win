@@ -6,7 +6,7 @@ import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const DEFAULT_APP_URL = 'https://win.sh'
-const DEFAULT_API_URL = 'https://api.win.sh'
+const DEFAULT_API_URL = 'https://win.sh'
 
 export function buildTokenApprovalUrl({
   appUrl = DEFAULT_APP_URL,

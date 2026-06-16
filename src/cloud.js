@@ -15,7 +15,7 @@ export async function fetchConnectorSnapshot({
   const resolvedToken = token || auth?.token
   if (!resolvedToken) throw new Error('Not logged in')
 
-  const resolvedApiUrl = apiUrl || auth?.apiUrl || 'https://api.win.sh'
+  const resolvedApiUrl = apiUrl || auth?.apiUrl || 'https://win.sh'
   const url = new URL(`/v1/loops/${encodeURIComponent(loopId)}/connector-snapshot`, resolvedApiUrl)
   const response = await fetchImpl(url, {
     headers: {

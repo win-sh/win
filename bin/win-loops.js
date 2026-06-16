@@ -314,7 +314,7 @@ async function auth(args) {
   if (subcommand === 'login') {
     const token = readOption(args, '--token')
     const workspace = readOption(args, '--workspace') || ''
-    const apiUrl = readOption(args, '--api-url') || 'https://api.win.sh'
+    const apiUrl = readOption(args, '--api-url') || 'https://win.sh'
     const appUrl = readOption(args, '--app-url') || 'https://win.sh'
 
     if (token) {

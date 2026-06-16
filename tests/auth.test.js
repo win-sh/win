@@ -37,7 +37,7 @@ test('saveAuth stores token metadata and redactToken keeps only the edges visibl
       configDir,
       token: 'win_live_123456789',
       workspace: 'acme',
-      apiUrl: 'https://api.win.sh',
+      apiUrl: 'https://win.sh',
       appUrl: 'https://win.sh',
       createdAt: '2026-06-16T12:00:00.000Z'
     })
@@ -48,7 +48,7 @@ test('saveAuth stores token metadata and redactToken keeps only the edges visibl
     assert.equal(redactToken(auth.token), 'win_...6789')
 
     const raw = JSON.parse(await readFile(join(configDir, 'auth.json'), 'utf8'))
-    assert.equal(raw.apiUrl, 'https://api.win.sh')
+    assert.equal(raw.apiUrl, 'https://win.sh')
   } finally {
     await rm(configDir, { recursive: true, force: true })
   }
@@ -62,7 +62,7 @@ test('loginWithBrowser stores the token returned to the local callback', async (
     const login = loginWithBrowser({
       configDir,
       appUrl: 'https://win.sh',
-      apiUrl: 'https://api.win.sh',
+      apiUrl: 'https://win.sh',
       openBrowser: true,
       opener: url => {
         approvalUrl = url
@@ -101,8 +101,6 @@ test('CLI auth manual token flow stores, prints, reports, and clears credentials
       'win_test_123456789',
       '--workspace',
       'acme',
-      '--api-url',
-      'https://api.win.sh',
       '--config-dir',
       configDir
     ], { cwd })
@@ -116,6 +114,7 @@ test('CLI auth manual token flow stores, prints, reports, and clears credentials
       configDir
     ], { cwd })
     assert.match(status.stdout, /Workspace: acme/)
+    assert.match(status.stdout, /API: https:\/\/win\.sh/)
     assert.match(status.stdout, /Token: win_...6789/)
 
     const token = await execFileAsync(process.execPath, [
