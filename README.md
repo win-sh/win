@@ -52,6 +52,21 @@ node bin/win-loops.js run bug-autofix \
 
 Then ask Codex or Claude Code to execute the generated run brief under `.win/runs/`.
 
+Show the local loop dashboard:
+
+```bash
+node bin/win-loops.js status --repo /path/to/app
+```
+
+Example:
+
+```text
+Loop         State     Status      Next run                  Countdown  Last run
+-----------  --------  ----------  ------------------------  ---------  ------------------------
+bug-autofix  enabled   diagnosing  2026-06-16T14:00:00.000Z  4h 30m     2026-06-16T08:00:00.000Z
+seo-growth   disabled  watching    -                         not scheduled  -
+```
+
 ## Catalog
 
 The initial catalog has 50 loop packs across:
@@ -98,6 +113,10 @@ win-loops list
 win-loops inspect <loop>
 win-loops install <loop> [--repo <path>] [--agent codex|claude-code]
 win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
+win-loops status [--repo <path>]
+win-loops enable <loop> [--repo <path>]
+win-loops disable <loop> [--repo <path>]
+win-loops journals [--repo <path>]
 win-loops journal <loop> [--repo <path>]
 win-loops eval
 ```

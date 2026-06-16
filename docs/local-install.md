@@ -46,3 +46,30 @@ Use the win-bug-autofix skill. Execute the latest run brief in .win/runs/.
 ```
 
 The agent should report artifacts back into the run journal or hosted win.sh.
+
+## Terminal Dashboard
+
+Show installed loops:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js status --repo /path/to/repo
+```
+
+Enable or disable a loop:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js disable seo-growth --repo /path/to/repo
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js enable seo-growth --repo /path/to/repo
+```
+
+List journals:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js journals --repo /path/to/repo
+```
+
+Read one journal:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js journal bug-autofix --repo /path/to/repo
+```

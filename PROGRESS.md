@@ -18,6 +18,9 @@ Last updated: 2026-06-16
 - Added `bug-autofix` signal adapter that turns the fixture into a scoped run signal and executor brief.
 - Added CLI support for `win-loops run bug-autofix --fixture <path>`.
 - Added focused production-loop and CLI fixture tests.
+- Added installed-loop state files with enabled/disabled status.
+- Added terminal dashboard command: `win-loops status --repo <path>`.
+- Added `enable`, `disable`, `journals`, and per-loop `journal` flows for local operation.
 
 ## Current Quality Gates
 
@@ -32,6 +35,7 @@ Last updated: 2026-06-16
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
 - Add artifact reporting commands: `artifact attach`, `outcome record`, and `approval request`.
+- Add configurable local scheduler that wakes due enabled loops and writes run briefs.
 - Add GitHub Actions CI after repo is published.
 
 ## First Production Candidate

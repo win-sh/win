@@ -3,9 +3,10 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
-import { installLoop } from '../src/installer.js'
+import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
 import { createLoopRun } from '../src/runner.js'
+import { getInstalledLoopStatus, renderStatusTable } from '../src/status.js'
 
 const [command, ...args] = process.argv.slice(2)
 
@@ -30,6 +31,14 @@ async function run(command, args) {
       return install(args)
     case 'run':
       return runLoop(args)
+    case 'status':
+      return status(args)
+    case 'enable':
+      return enableLoop(args, true)
+    case 'disable':
+      return enableLoop(args, false)
+    case 'journals':
+      return journals(args)
     case 'journal':
       return journal(args)
     case 'eval':
@@ -102,6 +111,27 @@ async function journal(args) {
   return readFile(resolve(targetRepo, '.win', 'loops', loopId, 'journal.md'), 'utf8')
 }
 
+async function journals(args) {
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const rows = await getInstalledLoopStatus({ targetRepo })
+  if (rows.length === 0) return 'No loops installed.\n'
+  return rows.map(row => `${row.id}\t.win/loops/${row.id}/journal.md`).join('\n') + '\n'
+}
+
+async function status(args) {
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const rows = await getInstalledLoopStatus({ targetRepo })
+  if (rows.length === 0) return 'No loops installed.\n'
+  return renderStatusTable(rows)
+}
+
+async function enableLoop(args, enabled) {
+  const loopId = readArg(args, 0, 'loop id')
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+  const state = await setLoopEnabled({ loopId, targetRepo, enabled })
+  return `${state.id} ${state.enabled ? 'enabled' : 'disabled'}\n`
+}
+
 async function evalCatalog() {
   const catalog = await loadCatalog()
   const report = await validateCatalog(catalog)
@@ -133,6 +163,10 @@ Commands:
   inspect <loop>
   install <loop> [--repo <path>] [--agent codex|claude-code]
   run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>]
+  status [--repo <path>]
+  enable <loop> [--repo <path>]
+  disable <loop> [--repo <path>]
+  journals [--repo <path>]
   journal <loop> [--repo <path>]
   eval
 `
