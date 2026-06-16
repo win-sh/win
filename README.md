@@ -78,6 +78,13 @@ node bin/win-loops.js exec --repo /path/to/app --agent codex --run <run-id>
 
 `inbox` summarizes pending executions, approvals, approved actions waiting for scheduler resume, overdue outcome checks, and latest proof per loop. `next` prints the single highest-priority operator action. `exec --dry-run` renders the local-agent handoff for the next executable run brief. `exec` without `--dry-run` runs the local agent command, captures stdout/stderr, updates run status, and writes an execution log.
 
+After execution, `win-loops` parses the captured log for likely proof such as PR URLs, changed files, and test summaries. These are saved as pending suggestions until an operator accepts them:
+
+```bash
+node bin/win-loops.js artifact suggestions --repo /path/to/app
+node bin/win-loops.js artifact accept <suggestion-id> --repo /path/to/app
+```
+
 Run one local scheduler pass:
 
 ```bash
@@ -171,6 +178,9 @@ win-loops disable <loop> [--repo <path>]
 win-loops journals [--repo <path>]
 win-loops journal <loop> [--repo <path>]
 win-loops artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
+win-loops artifact suggestions [--repo <path>]
+win-loops artifact suggest <execution-id> [--repo <path>]
+win-loops artifact accept <suggestion-id> [--repo <path>]
 win-loops outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
 win-loops approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
 win-loops approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]
@@ -186,4 +196,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, executor dry-runs and execution capture, reporting commands, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, executor dry-runs and execution capture, artifact suggestions, reporting commands, CLI flows, and journal writes.

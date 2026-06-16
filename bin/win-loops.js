@@ -8,6 +8,12 @@ import { buildInbox, pickNextAction, renderInbox, renderNextAction } from '../sr
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
 import {
+  acceptArtifactSuggestion,
+  listArtifactSuggestions,
+  renderArtifactSuggestionsTable,
+  suggestArtifactsFromExecution
+} from '../src/artifact-suggestions.js'
+import {
   approveApproval,
   attachArtifact,
   recordOutcome,
@@ -196,10 +202,26 @@ async function enableLoop(args, enabled) {
 
 async function artifact(args) {
   const subcommand = readArg(args, 0, 'artifact subcommand')
+  const targetRepo = readOption(args, '--repo') || process.cwd()
+
+  if (subcommand === 'suggestions') {
+    const suggestions = await listArtifactSuggestions({ targetRepo })
+    return renderArtifactSuggestionsTable(suggestions)
+  }
+
+  if (subcommand === 'suggest') {
+    const executionId = readArg(args, 1, 'execution id')
+    return suggestArtifactsFromExecution({ targetRepo, executionId })
+  }
+
+  if (subcommand === 'accept') {
+    const suggestionId = readArg(args, 1, 'suggestion id')
+    return acceptArtifactSuggestion({ targetRepo, suggestionId })
+  }
+
   if (subcommand !== 'attach') throw new Error(`Unknown artifact command: ${subcommand}`)
 
   const runId = readArg(args, 1, 'run id')
-  const targetRepo = readOption(args, '--repo') || process.cwd()
   return attachArtifact({
     targetRepo,
     runId,
@@ -297,6 +319,9 @@ Commands:
   journals [--repo <path>]
   journal <loop> [--repo <path>]
   artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
+  artifact suggestions [--repo <path>]
+  artifact suggest <execution-id> [--repo <path>]
+  artifact accept <suggestion-id> [--repo <path>]
   outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
   approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
   approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]

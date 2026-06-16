@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
 import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
+import { suggestArtifactsFromExecution } from './artifact-suggestions.js'
 import { buildInbox, pickNextAction, renderNextAction } from './inbox.js'
 
 const AGENTS = new Map([
@@ -130,6 +131,11 @@ export async function executeExecPlan(plan, {
     execution
   })
   await appendExecutionJournal({ target, plan, execution })
+  await suggestArtifactsFromExecution({
+    targetRepo: target,
+    executionId: execution.id,
+    now: execution.finishedAt
+  })
 
   return execution
 }

@@ -368,3 +368,90 @@ test('CLI exec captures real command output when dry-run is omitted', async () =
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('CLI artifact suggestions can be listed and accepted after execution', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-artifact-suggestions-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout: runStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--signal',
+      'Checkout crash repeated 21 times.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const run = JSON.parse(runStdout)
+
+    await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'exec',
+      '--repo',
+      target,
+      '--agent',
+      'codex',
+      '--run',
+      run.id
+    ], {
+      cwd: new URL('..', import.meta.url).pathname,
+      env: {
+        ...process.env,
+        WIN_LOOPS_CODEX_EXECUTABLE: process.execPath,
+        WIN_LOOPS_CODEX_ARGS_JSON: JSON.stringify([
+          '-e',
+          [
+            'console.log("Opened PR https://github.com/acme/app/pull/123")',
+            'console.log("modified: src/checkout.js")',
+            'console.log("Tests passed: 14 passed, 0 failed")'
+          ].join(';')
+        ])
+      }
+    })
+
+    const { stdout: suggestionsStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'artifact',
+      'suggestions',
+      '--repo',
+      target
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.match(suggestionsStdout, /Artifact Suggestions/)
+    assert.match(suggestionsStdout, /GitHub PR acme\/app#123/)
+
+    const suggestions = parseJsonl(await readFile(join(target, '.win', 'state', 'artifact-suggestions.jsonl'), 'utf8'))
+    const { stdout: acceptStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'artifact',
+      'accept',
+      suggestions[0].id,
+      '--repo',
+      target
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const accepted = JSON.parse(acceptStdout)
+    assert.equal(accepted.artifact.kind, 'pr')
+    assert.equal(accepted.suggestion.status, 'accepted')
+
+    const artifacts = await readFile(join(target, '.win', 'state', 'artifacts.jsonl'), 'utf8')
+    assert.match(artifacts, /https:\/\/github\.com\/acme\/app\/pull\/123/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+function parseJsonl(raw) {
+  return raw
+    .split('\n')
+    .filter(Boolean)
+    .map(line => JSON.parse(line))
+}

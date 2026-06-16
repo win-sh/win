@@ -16,6 +16,7 @@ This creates:
   loops/<loop-id>/journal.md
   state/runs.jsonl
   state/artifacts.jsonl
+  state/artifact-suggestions.jsonl
   state/outcomes.jsonl
   state/approvals.jsonl
   state/executions.jsonl
@@ -48,7 +49,19 @@ Then ask the agent:
 Use the win-bug-autofix skill. Execute the latest run brief in .win/runs/.
 ```
 
-The agent should report artifacts back into the run journal or hosted win.sh.
+The agent should report artifacts back into the run journal or hosted win.sh. If you use `win-loops exec`, stdout and stderr are captured in `.win/executions/` and likely proof is suggested automatically.
+
+Review suggested artifacts after execution:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js artifact suggestions \
+  --repo /path/to/repo
+
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js artifact accept <suggestion-id> \
+  --repo /path/to/repo
+```
+
+`artifact suggestions` shows pending proof detected from execution logs, such as PR URLs, changed files, and test summaries. `artifact accept` converts one suggestion into a real artifact, updates `.win/state/artifacts.jsonl`, and appends the loop journal.
 
 Attach an artifact after execution:
 

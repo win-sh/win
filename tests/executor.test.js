@@ -172,6 +172,55 @@ test('executeExecPlan captures a successful command into execution state and jou
   }
 })
 
+test('executeExecPlan stores artifact suggestions from agent output', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-exec-suggestions-'))
+
+  try {
+    await installLoop({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      agent: 'codex',
+      sourceRoot: new URL('..', import.meta.url)
+    })
+    const run = await createLoopRun({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      trigger: 'manual',
+      signal: 'Checkout crash repeated 21 times.',
+      now: new Date('2026-06-16T08:00:00.000Z')
+    })
+    const plan = await buildExecPlan({
+      targetRepo: target,
+      agent: 'codex',
+      runId: run.id,
+      dryRun: false
+    })
+
+    const execution = await executeExecPlan(plan, {
+      executable: process.execPath,
+      args: [
+        '-e',
+        [
+          'console.log("Opened PR https://github.com/acme/app/pull/123")',
+          'console.log("modified: src/checkout.js")',
+          'console.log("Tests passed: 14 passed, 0 failed")'
+        ].join(';')
+      ],
+      now: new Date('2026-06-16T09:00:00.000Z')
+    })
+
+    assert.equal(execution.status, 'succeeded')
+
+    const suggestions = parseJsonl(await readFile(join(target, '.win', 'state', 'artifact-suggestions.jsonl'), 'utf8'))
+    assert.equal(suggestions.length, 3)
+    assert.deepEqual(suggestions.map(suggestion => suggestion.kind), ['pr', 'file', 'test'])
+    assert.equal(suggestions[0].executionId, execution.id)
+    assert.equal(suggestions[0].status, 'pending')
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
 test('executeExecPlan records failed commands without losing the log', async () => {
   const target = await mkdtemp(join(tmpdir(), 'win-loops-exec-failure-'))
 
