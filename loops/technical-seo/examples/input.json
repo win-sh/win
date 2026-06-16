@@ -1,0 +1,5 @@
+{
+  "loopId": "technical-seo",
+  "trigger": "manual",
+  "signal": "Example signal for Technical SEO: GSC coverage warnings, sitemap errors, metadata regressions, schema failures, CWV drops."
+}

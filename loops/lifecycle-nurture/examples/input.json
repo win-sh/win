@@ -1,0 +1,5 @@
+{
+  "loopId": "lifecycle-nurture",
+  "trigger": "manual",
+  "signal": "Example signal for Lifecycle Nurture: User enters milestone, stalls, upgrades, or risks churn."
+}

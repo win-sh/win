@@ -1,0 +1,5 @@
+{
+  "loopId": "winback",
+  "trigger": "manual",
+  "signal": "Example signal for Winback Loop: A churned segment emerges or a product fix addresses prior churn reason."
+}

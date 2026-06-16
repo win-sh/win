@@ -1,0 +1,5 @@
+{
+  "loopId": "competitor-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Competitor Watch: Competitor page changes, pricing shifts, ad changes, ranking moves, or news appear."
+}

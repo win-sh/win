@@ -1,0 +1,5 @@
+{
+  "loopId": "knowledge-hygiene",
+  "trigger": "manual",
+  "signal": "Example signal for Knowledge Hygiene: Weekly reflection, contradiction, stale claim, or repeated failed action appears."
+}

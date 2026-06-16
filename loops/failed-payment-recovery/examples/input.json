@@ -1,0 +1,5 @@
+{
+  "loopId": "failed-payment-recovery",
+  "trigger": "manual",
+  "signal": "Example signal for Failed Payment Recovery: Payment fails, subscription becomes past due, or dunning does not recover."
+}

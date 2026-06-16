@@ -1,0 +1,5 @@
+{
+  "loopId": "churn-reason-mining",
+  "trigger": "manual",
+  "signal": "Example signal for Churn Reason Mining: New churn events, refund requests, or cancellation feedback accumulates."
+}

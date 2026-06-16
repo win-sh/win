@@ -1,0 +1,5 @@
+{
+  "loopId": "review-testimonial",
+  "trigger": "manual",
+  "signal": "Example signal for Review Testimonial Loop: A user succeeds, upgrades, replies positively, or reaches usage milestone."
+}

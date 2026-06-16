@@ -1,0 +1,5 @@
+{
+  "loopId": "broken-flow-repair",
+  "trigger": "manual",
+  "signal": "Example signal for Broken Flow Repair: Synthetic tests fail or product analytics show abnormal flow drop-off."
+}

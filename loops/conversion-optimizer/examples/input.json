@@ -1,0 +1,5 @@
+{
+  "loopId": "conversion-optimizer",
+  "trigger": "manual",
+  "signal": "Example signal for Conversion Optimizer: Conversion drops, traffic mix shifts, or an experiment opportunity is identified."
+}

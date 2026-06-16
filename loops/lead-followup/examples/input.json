@@ -1,0 +1,5 @@
+{
+  "loopId": "lead-followup",
+  "trigger": "manual",
+  "signal": "Example signal for Lead Follow-up: Lead is stale, trial has intent signal, or reply is waiting."
+}

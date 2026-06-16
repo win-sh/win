@@ -1,0 +1,5 @@
+{
+  "loopId": "internal-linking",
+  "trigger": "manual",
+  "signal": "Example signal for Internal Linking: A valuable page is orphaned, underlinked, or ranking just below target."
+}

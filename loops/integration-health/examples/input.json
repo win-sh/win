@@ -1,0 +1,5 @@
+{
+  "loopId": "integration-health",
+  "trigger": "manual",
+  "signal": "Example signal for Integration Health: Connector errors, expired tokens, missing scopes, or stale sync timestamps appear."
+}

@@ -1,0 +1,5 @@
+{
+  "loopId": "pricing-experiment",
+  "trigger": "manual",
+  "signal": "Example signal for Pricing Experiment: Conversion, ARPU, churn, refund, or competitor pricing signals change."
+}

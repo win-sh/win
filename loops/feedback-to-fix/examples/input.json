@@ -1,0 +1,5 @@
+{
+  "loopId": "feedback-to-fix",
+  "trigger": "manual",
+  "signal": "Example signal for Feedback to Fix: New feedback arrives, complaints cluster, or a high-value user reports pain."
+}

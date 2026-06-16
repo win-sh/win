@@ -1,0 +1,5 @@
+{
+  "loopId": "quality-regression",
+  "trigger": "manual",
+  "signal": "Example signal for Quality Regression: Failure rate, retries, complaints, or refunds increase."
+}

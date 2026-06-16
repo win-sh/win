@@ -1,0 +1,5 @@
+{
+  "loopId": "backup-restore-drill",
+  "trigger": "manual",
+  "signal": "Example signal for Backup Restore Drill: Scheduled drill date arrives or infrastructure changes."
+}

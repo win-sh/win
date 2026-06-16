@@ -1,0 +1,5 @@
+{
+  "loopId": "crm-hygiene",
+  "trigger": "manual",
+  "signal": "Example signal for CRM Hygiene: Deals go stale, stages conflict, or required fields are missing."
+}

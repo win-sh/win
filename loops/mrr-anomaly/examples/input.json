@@ -1,0 +1,5 @@
+{
+  "loopId": "mrr-anomaly",
+  "trigger": "manual",
+  "signal": "Example signal for MRR Anomaly: MRR, churn, expansion, refunds, or trial conversion moves materially."
+}

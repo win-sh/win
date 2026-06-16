@@ -1,0 +1,5 @@
+{
+  "loopId": "weekly-business-review",
+  "trigger": "manual",
+  "signal": "Example signal for Weekly Business Review: Weekly review time arrives or owner requests a review."
+}

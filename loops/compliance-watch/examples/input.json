@@ -1,0 +1,5 @@
+{
+  "loopId": "compliance-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Compliance Watch: Deadline approaches, regulation changes, or required document is missing."
+}

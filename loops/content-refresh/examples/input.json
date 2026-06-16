@@ -1,0 +1,5 @@
+{
+  "loopId": "content-refresh",
+  "trigger": "manual",
+  "signal": "Example signal for Content Refresh: Clicks or impressions decay over several weeks without a known seasonality reason."
+}

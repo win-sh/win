@@ -1,0 +1,5 @@
+{
+  "loopId": "security-scan-response",
+  "trigger": "manual",
+  "signal": "Example signal for Security Scan Response: Security scan produces new finding or dependency advisory."
+}

@@ -1,0 +1,5 @@
+{
+  "loopId": "failed-job-recovery",
+  "trigger": "manual",
+  "signal": "Example signal for Failed Job Recovery: A recurring job, webhook, or queue worker fails repeatedly."
+}

@@ -1,0 +1,5 @@
+{
+  "loopId": "refund-dispute-defense",
+  "trigger": "manual",
+  "signal": "Example signal for Refund and Dispute Defense: A dispute, refund request, or chargeback signal appears."
+}

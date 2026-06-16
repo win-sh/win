@@ -1,0 +1,5 @@
+{
+  "loopId": "programmatic-seo-qa",
+  "trigger": "manual",
+  "signal": "Example signal for Programmatic SEO QA: New page batch ships, traffic decays, duplicate/cannibalization risk appears."
+}

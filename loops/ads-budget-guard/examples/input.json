@@ -1,0 +1,5 @@
+{
+  "loopId": "ads-budget-guard",
+  "trigger": "manual",
+  "signal": "Example signal for Ads Budget Guard: Spend, CAC, ROAS, or conversion moves outside guardrails."
+}

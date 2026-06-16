@@ -1,0 +1,5 @@
+{
+  "loopId": "margin-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Margin Watch: Cost or margin moves outside threshold."
+}

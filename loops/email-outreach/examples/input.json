@@ -1,0 +1,5 @@
+{
+  "loopId": "email-outreach",
+  "trigger": "manual",
+  "signal": "Example signal for Email Outreach: A campaign goal exists and a verified target segment is available."
+}

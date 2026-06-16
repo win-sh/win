@@ -1,0 +1,5 @@
+{
+  "loopId": "abuse-fraud-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Abuse and Fraud Watch: Usage/cost/payment patterns cross abuse thresholds."
+}

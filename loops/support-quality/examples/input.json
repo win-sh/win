@@ -1,0 +1,5 @@
+{
+  "loopId": "support-quality",
+  "trigger": "manual",
+  "signal": "Example signal for Support Quality: Open threads age, repeated follow-ups, low satisfaction, or unresolved pain appears."
+}

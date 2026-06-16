@@ -1,0 +1,5 @@
+{
+  "loopId": "traffic-growth-optimizer",
+  "trigger": "manual",
+  "signal": "Example signal for Traffic Growth Optimizer: Traffic changes materially or a channel underperforms baseline."
+}

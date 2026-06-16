@@ -1,0 +1,5 @@
+{
+  "loopId": "regression-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Regression Watch: A deploy finishes, a new error group appears, or a critical metric moves after release."
+}

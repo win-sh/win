@@ -1,0 +1,5 @@
+{
+  "loopId": "analytics-tracking-qa",
+  "trigger": "manual",
+  "signal": "Example signal for Analytics Tracking QA: Key event volume drops, spikes, duplicates, or attribution changes unexpectedly."
+}

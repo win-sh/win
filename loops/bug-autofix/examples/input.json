@@ -1,0 +1,5 @@
+{
+  "loopId": "bug-autofix",
+  "trigger": "manual",
+  "signal": "Example signal for Bug Autofix: A production error repeats, a paying user is affected, or a new error appears after deploy."
+}

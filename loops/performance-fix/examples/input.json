@@ -1,0 +1,5 @@
+{
+  "loopId": "performance-fix",
+  "trigger": "manual",
+  "signal": "Example signal for Performance Fix: Page speed or endpoint latency crosses target thresholds."
+}

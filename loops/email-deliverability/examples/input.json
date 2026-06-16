@@ -1,0 +1,5 @@
+{
+  "loopId": "email-deliverability",
+  "trigger": "manual",
+  "signal": "Example signal for Email Deliverability: Bounce rate, spam complaints, unsubscribes, or low reply quality crosses threshold."
+}

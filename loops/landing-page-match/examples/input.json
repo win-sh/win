@@ -1,0 +1,5 @@
+{
+  "loopId": "landing-page-match",
+  "trigger": "manual",
+  "signal": "Example signal for Landing Page Match: Paid clicks convert below benchmark or bounce rate rises."
+}

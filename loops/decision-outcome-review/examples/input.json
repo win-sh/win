@@ -1,0 +1,5 @@
+{
+  "loopId": "decision-outcome-review",
+  "trigger": "manual",
+  "signal": "Example signal for Decision Outcome Review: A decision verification date arrives or a major outcome lands."
+}

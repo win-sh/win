@@ -1,0 +1,25 @@
+{
+  "name": "win-loops",
+  "version": "0.1.0",
+  "description": "Open-source business improvement loops for AI agents and win.sh.",
+  "type": "module",
+  "bin": {
+    "win-loops": "bin/win-loops.js"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "eval": "node bin/win-loops.js eval",
+    "check": "npm test && npm run eval"
+  },
+  "keywords": [
+    "agents",
+    "codex",
+    "claude-code",
+    "business-automation",
+    "loops"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  }
+}

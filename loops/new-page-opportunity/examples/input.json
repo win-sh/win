@@ -1,0 +1,5 @@
+{
+  "loopId": "new-page-opportunity",
+  "trigger": "manual",
+  "signal": "Example signal for New Page Opportunity: Competitor ranks for relevant terms, GSC shows adjacent queries, or customers use repeated language."
+}

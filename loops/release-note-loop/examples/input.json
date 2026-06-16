@@ -1,0 +1,5 @@
+{
+  "loopId": "release-note-loop",
+  "trigger": "manual",
+  "signal": "Example signal for Release Note Loop: PRs merge, feature ships, or customer-requested fix is released."
+}

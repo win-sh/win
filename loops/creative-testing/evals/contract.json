@@ -1,0 +1,10 @@
+{
+  "loopId": "creative-testing",
+  "checks": [
+    "has_required_loop_sections",
+    "has_executor_skill",
+    "has_journal",
+    "has_example_input",
+    "has_adaptive_scheduling_policy"
+  ]
+}

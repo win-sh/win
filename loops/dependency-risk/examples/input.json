@@ -1,0 +1,5 @@
+{
+  "loopId": "dependency-risk",
+  "trigger": "manual",
+  "signal": "Example signal for Dependency Risk: A security advisory, lockfile drift, or stale critical dependency appears."
+}

@@ -1,0 +1,5 @@
+{
+  "loopId": "activation-optimizer",
+  "trigger": "manual",
+  "signal": "Example signal for Activation Optimizer: Activation rate drops or onboarding step has high abandonment."
+}

@@ -1,0 +1,5 @@
+{
+  "loopId": "gsc-rank-growth",
+  "trigger": "manual",
+  "signal": "Example signal for GSC Rank Growth: A page has impressions with weak CTR, rank 4-20 opportunity, or click decay."
+}

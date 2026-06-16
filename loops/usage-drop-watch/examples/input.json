@@ -1,0 +1,5 @@
+{
+  "loopId": "usage-drop-watch",
+  "trigger": "manual",
+  "signal": "Example signal for Usage Drop Watch: Active usage, feature use, or cohort retention drops."
+}

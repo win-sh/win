@@ -1,0 +1,5 @@
+{
+  "loopId": "feature-request-scoring",
+  "trigger": "manual",
+  "signal": "Example signal for Feature Request Scoring: Feature requests accumulate or roadmap decision is needed."
+}
