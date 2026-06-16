@@ -18,7 +18,7 @@ export async function createLoopRun({
   const markdown = await readFile(loopPath, 'utf8')
   const loop = parseLoopMarkdown(markdown)
   const timestamp = toDate(now).toISOString()
-  const id = `${loopId}-${timestamp.replace(/[-:.TZ]/g, '').slice(0, 14)}`
+  const id = await nextRunId({ target, loopId, timestamp })
   const status = 'diagnosing'
   const nextRun = decideNextRun({ loopId, trigger, status, now: toDate(now) })
   const run = {
@@ -113,6 +113,31 @@ function expectedOutcomeFor(loopId) {
   if (loopId.includes('seo')) return 'Target page or query improves clicks, CTR, ranking, or indexed coverage after the verification window.'
   if (loopId.includes('feedback')) return 'The user-facing issue is classified, acted on, and the customer receives a useful response.'
   return 'The target business metric improves or the loop records why no action was warranted.'
+}
+
+async function nextRunId({ target, loopId, timestamp }) {
+  const base = `${loopId}-${timestamp.replace(/[-:.TZ]/g, '').slice(0, 14)}`
+  const existingRuns = await readExistingRuns(join(target, '.win', 'state', 'runs.jsonl'))
+  const existingIds = new Set(existingRuns.map(run => run.id))
+  if (!existingIds.has(base)) return base
+
+  let suffix = 2
+  while (existingIds.has(`${base}-${suffix}`)) {
+    suffix += 1
+  }
+  return `${base}-${suffix}`
+}
+
+async function readExistingRuns(path) {
+  try {
+    const raw = await readFile(path, 'utf8')
+    return raw
+      .split('\n')
+      .filter(Boolean)
+      .map(line => JSON.parse(line))
+  } catch {
+    return []
+  }
 }
 
 function toDate(value) {

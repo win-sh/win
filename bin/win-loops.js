@@ -5,7 +5,13 @@ import { loadCatalog, loadLoop } from '../src/catalog.js'
 import { validateCatalog } from '../src/eval.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
 import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
-import { attachArtifact, recordOutcome, requestApproval } from '../src/reporting.js'
+import {
+  approveApproval,
+  attachArtifact,
+  recordOutcome,
+  rejectApproval,
+  requestApproval
+} from '../src/reporting.js'
 import { createLoopRun } from '../src/runner.js'
 import { getInstalledLoopStatus, renderStatusTable } from '../src/status.js'
 import { tickLoops, renderTickTable } from '../src/tick.js'
@@ -183,6 +189,19 @@ async function outcome(args) {
 
 async function approval(args) {
   const subcommand = readArg(args, 0, 'approval subcommand')
+
+  if (subcommand === 'approve' || subcommand === 'reject') {
+    const approvalId = readArg(args, 1, 'approval id')
+    const targetRepo = readOption(args, '--repo') || process.cwd()
+    const payload = {
+      targetRepo,
+      approvalId,
+      decidedBy: readOption(args, '--by') || '',
+      note: readOption(args, '--note') || ''
+    }
+    return subcommand === 'approve' ? approveApproval(payload) : rejectApproval(payload)
+  }
+
   if (subcommand !== 'request') throw new Error(`Unknown approval command: ${subcommand}`)
 
   const runId = readArg(args, 1, 'run id')
@@ -237,6 +256,8 @@ Commands:
   artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
   outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
   approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
+  approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]
+  approval reject <approval-id> [--repo <path>] [--by <text>] [--note <text>]
   eval
 `
 }

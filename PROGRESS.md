@@ -25,6 +25,8 @@ Last updated: 2026-06-16
 - Added due-loop detection that skips disabled loops, writes due run briefs, and persists adaptive `nextRunAt` state.
 - Added reporting commands: `artifact attach`, `outcome record`, and `approval request`.
 - Added `artifacts.jsonl` plus run updates and journal entries for reporting events.
+- Added approval decision commands: `approval approve` and `approval reject`.
+- Added scheduler resumption for approved approvals via `trigger: "approval"` run briefs.
 
 ## Current Quality Gates
 
@@ -38,7 +40,7 @@ Last updated: 2026-06-16
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
-- Add approval resolution commands: `approval approve` and `approval reject`.
+- Add approval inbox/listing command for pending decisions.
 - Add configurable local scheduler daemon/service wrappers for launchd, cron, and GitHub Actions.
 - Add GitHub Actions CI after repo is published.
 

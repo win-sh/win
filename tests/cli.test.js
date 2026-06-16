@@ -135,12 +135,63 @@ test('CLI reporting commands attach artifacts, outcomes, and approvals to a run'
     ], {
       cwd: new URL('..', import.meta.url).pathname
     })
-    assert.equal(JSON.parse(approvalStdout).status, 'pending')
+    const approval = JSON.parse(approvalStdout)
+    assert.equal(approval.status, 'pending')
+
+    const { stdout: approveStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'approval',
+      'approve',
+      approval.id,
+      '--repo',
+      target,
+      '--by',
+      'founder',
+      '--note',
+      'Approved from CLI.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.equal(JSON.parse(approveStdout).status, 'approved')
+
+    const { stdout: nextApprovalStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'approval',
+      'request',
+      run.id,
+      '--repo',
+      target,
+      '--action',
+      'Roll back PR',
+      '--reason',
+      'Metric got worse.',
+      '--risk',
+      'low'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    const nextApproval = JSON.parse(nextApprovalStdout)
+
+    const { stdout: rejectStdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'approval',
+      'reject',
+      nextApproval.id,
+      '--repo',
+      target,
+      '--by',
+      'founder',
+      '--note',
+      'Rejecting rollback for now.'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+    assert.equal(JSON.parse(rejectStdout).status, 'rejected')
 
     const runs = await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8')
     assert.match(runs, /"artifacts":/)
     assert.match(runs, /"latestOutcome":/)
-    assert.match(runs, /"pendingApprovals":/)
+    assert.match(runs, /"approvalDecisions":/)
   } finally {
     await rm(target, { recursive: true, force: true })
   }

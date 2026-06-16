@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises'
+import { appendFile, readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { createLoopRun } from './runner.js'
 
@@ -27,6 +27,43 @@ export async function tickLoops({ targetRepo = process.cwd(), now = new Date() }
         reason: 'loop disabled',
         nextRunAt: scheduledAt,
         runId: ''
+      })
+      continue
+    }
+
+    const resumableApproval = findResumableApproval(runs, loopId)
+    if (resumableApproval) {
+      const run = await createLoopRun({
+        loopId,
+        targetRepo: target,
+        trigger: 'approval',
+        signal: renderApprovalSignal(resumableApproval),
+        now: checkedAt
+      })
+
+      await markApprovalResumed({
+        target,
+        sourceRunId: resumableApproval.run.id,
+        approvalId: resumableApproval.decision.approvalId,
+        resumedRunId: run.id,
+        now: checkedAt
+      })
+      await writeLoopState(statePath, {
+        ...state,
+        enabled: true,
+        lastTickAt: checkedAt.toISOString(),
+        lastRunId: run.id,
+        lastRunAt: run.createdAt,
+        nextRunAt: run.nextRun.at,
+        updatedAt: checkedAt.toISOString()
+      })
+
+      rows.push({
+        loopId,
+        action: 'resumed',
+        reason: 'approval approved',
+        nextRunAt: run.nextRun.at,
+        runId: run.id
       })
       continue
     }
@@ -102,6 +139,16 @@ function dueReasonFor({ scheduledAt, now }) {
   return null
 }
 
+function findResumableApproval(runs, loopId) {
+  for (const run of runs) {
+    if (run.loopId !== loopId) continue
+    const decision = (run.approvalDecisions || []).find(item => item.status === 'approved' && !item.resumedRunId)
+    if (decision) return { run, decision }
+  }
+
+  return null
+}
+
 function renderTickSignal({ loopId, reason, scheduledAt, checkedAt }) {
   return [
     `Scheduled tick for ${loopId}.`,
@@ -109,6 +156,19 @@ function renderTickSignal({ loopId, reason, scheduledAt, checkedAt }) {
     `Reason: ${reason}.`,
     `Checked at: ${checkedAt.toISOString()}.`,
     `Previous next run: ${scheduledAt || 'none'}.`
+  ].join('\n')
+}
+
+function renderApprovalSignal({ run, decision }) {
+  return [
+    'Approval was approved for a previous loop run.',
+    '',
+    `Original run: ${run.id}.`,
+    `Approval: ${decision.approvalId}.`,
+    `Action: ${decision.action}.`,
+    `Reason: ${decision.reason}.`,
+    `Approved by: ${decision.decidedBy || decision.approver || 'unknown'}.`,
+    `Approval note: ${decision.note || '-'}`
   ].join('\n')
 }
 
@@ -147,6 +207,49 @@ async function readLoopState(path, loopId) {
 
 async function writeLoopState(path, state) {
   await writeFile(path, `${JSON.stringify(state, null, 2)}\n`, 'utf8')
+}
+
+async function markApprovalResumed({ target, sourceRunId, approvalId, resumedRunId, now }) {
+  const runsPath = join(target, '.win', 'state', 'runs.jsonl')
+  const runs = await readRuns(runsPath)
+  const index = runs.findIndex(run => run.id === sourceRunId)
+  if (index === -1) return
+
+  const timestamp = toDate(now).toISOString()
+  const sourceRun = runs[index]
+  sourceRun.status = 'approval_resumed'
+  sourceRun.approvalDecisions = (sourceRun.approvalDecisions || []).map(decision => {
+    if (decision.approvalId !== approvalId) return decision
+    return {
+      ...decision,
+      resumedRunId,
+      resumedAt: timestamp
+    }
+  })
+  sourceRun.updatedAt = timestamp
+  runs[index] = sourceRun
+
+  await writeRuns(runsPath, runs)
+  await appendFile(
+    join(target, '.win', 'loops', sourceRun.loopId, 'journal.md'),
+    renderApprovalResumeJournal({ sourceRunId, approvalId, resumedRunId, timestamp }),
+    'utf8'
+  )
+}
+
+async function writeRuns(path, runs) {
+  const body = runs.map(run => JSON.stringify(run)).join('\n')
+  await writeFile(path, `${body}${body ? '\n' : ''}`, 'utf8')
+}
+
+function renderApprovalResumeJournal({ sourceRunId, approvalId, resumedRunId, timestamp }) {
+  return `
+## ${timestamp.slice(0, 10)} - Approval Resumed
+
+- Original Run: ${sourceRunId}
+- Approval: ${approvalId}
+- Resumed Run: ${resumedRunId}
+`
 }
 
 async function safeReaddir(path) {

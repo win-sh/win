@@ -44,3 +44,49 @@ test('createLoopRun writes a run record, run brief, and journal entry with adapt
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('createLoopRun makes unique run ids for same-second loop runs', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-run-id-'))
+
+  try {
+    await installLoop({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      agent: 'codex',
+      sourceRoot: new URL('..', import.meta.url)
+    })
+
+    const now = new Date('2026-06-16T08:00:00.000Z')
+    const first = await createLoopRun({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      trigger: 'manual',
+      signal: 'First run.',
+      now
+    })
+    const second = await createLoopRun({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      trigger: 'approval',
+      signal: 'Second run in the same second.',
+      now
+    })
+
+    assert.notEqual(first.id, second.id)
+
+    const runs = parseJsonl(await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8'))
+    assert.equal(new Set(runs.map(run => run.id)).size, 2)
+
+    const secondBrief = await readFile(join(target, '.win', 'runs', `${second.id}.md`), 'utf8')
+    assert.match(secondBrief, /Second run in the same second/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+function parseJsonl(raw) {
+  return raw
+    .split('\n')
+    .filter(Boolean)
+    .map(line => JSON.parse(line))
+}

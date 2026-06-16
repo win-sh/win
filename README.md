@@ -95,7 +95,14 @@ node bin/win-loops.js approval request <run-id> \
   --action "Merge PR 123" \
   --reason "Touches checkout payment flow." \
   --risk medium
+
+node bin/win-loops.js approval approve <approval-id> \
+  --repo /path/to/app \
+  --by founder \
+  --note "Approved after test review."
 ```
+
+When an approval is approved, the next `tick` creates a new `trigger: "approval"` run brief so the agent can continue with the approved action.
 
 ## Catalog
 
@@ -152,6 +159,8 @@ win-loops journal <loop> [--repo <path>]
 win-loops artifact attach <run-id> [--repo <path>] [--kind <kind>] [--url <url>] [--path <path>] [--title <text>] [--summary <text>]
 win-loops outcome record <run-id> [--repo <path>] --status <status> [--metric <metric>] [--summary <text>] [--evidence <text>]
 win-loops approval request <run-id> [--repo <path>] --action <text> --reason <text> [--risk low|medium|high] [--approver <text>]
+win-loops approval approve <approval-id> [--repo <path>] [--by <text>] [--note <text>]
+win-loops approval reject <approval-id> [--repo <path>] [--by <text>] [--note <text>]
 win-loops eval
 ```
 

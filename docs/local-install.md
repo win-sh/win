@@ -81,6 +81,22 @@ node /Users/romainsimon/dev/win-loops/bin/win-loops.js approval request <run-id>
   --approver founder
 ```
 
+Resolve the approval:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js approval approve <approval-id> \
+  --repo /path/to/repo \
+  --by founder \
+  --note "Approved after checking tests."
+
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js approval reject <approval-id> \
+  --repo /path/to/repo \
+  --by founder \
+  --note "Rejected until a safer migration is added."
+```
+
+Approved actions are resumed by the scheduler. The next `tick` creates a new run brief with `trigger: "approval"` and links it back to the approval decision.
+
 ## Terminal Dashboard
 
 Show installed loops:
@@ -117,6 +133,8 @@ node /Users/romainsimon/dev/win-loops/bin/win-loops.js tick --repo /path/to/repo
 ```
 
 `tick` creates run briefs only for enabled loops that are due. It is safe to call from a simple local timer because each loop owns its next adaptive run time in `.win/loops/<loop-id>/state.json`.
+
+If a run has an approved approval decision, `tick` resumes it before waiting for the normal `nextRunAt` time.
 
 Example cron-style wrapper:
 

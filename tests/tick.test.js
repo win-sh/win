@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
+import { approveApproval, rejectApproval, requestApproval } from '../src/reporting.js'
 import { createLoopRun } from '../src/runner.js'
 import { tickLoops, renderTickTable } from '../src/tick.js'
 
@@ -120,3 +121,112 @@ test('tickLoops respects explicit future state nextRunAt', async () => {
     await rm(target, { recursive: true, force: true })
   }
 })
+
+test('tickLoops resumes an approved approval before the scheduled next run', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-tick-approved-'))
+
+  try {
+    await installLoop({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      agent: 'codex',
+      sourceRoot: new URL('..', import.meta.url)
+    })
+
+    const run = await createLoopRun({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      trigger: 'manual',
+      signal: 'Checkout crash repeated 21 times.',
+      now: new Date('2026-06-16T08:00:00.000Z')
+    })
+    const approval = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Merge PR https://github.com/acme/app/pull/123',
+      reason: 'Fix is tested but touches checkout payment flow.',
+      risk: 'medium',
+      now: new Date('2026-06-16T08:10:00.000Z')
+    })
+    await approveApproval({
+      targetRepo: target,
+      approvalId: approval.id,
+      decidedBy: 'founder',
+      note: 'Approved for merge.',
+      now: new Date('2026-06-16T08:20:00.000Z')
+    })
+
+    const report = await tickLoops({
+      targetRepo: target,
+      now: new Date('2026-06-16T08:30:00.000Z')
+    })
+
+    assert.equal(report.rows[0].action, 'resumed')
+    assert.match(report.rows[0].reason, /approval approved/)
+
+    const runs = parseJsonl(await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8'))
+    const resumedRun = runs.find(item => item.trigger === 'approval')
+    const originalRun = runs.find(item => item.id === run.id)
+    assert.ok(resumedRun)
+    assert.match(resumedRun.signal, /Merge PR/)
+    assert.equal(originalRun.status, 'approval_resumed')
+    assert.equal(originalRun.approvalDecisions[0].resumedRunId, resumedRun.id)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+test('tickLoops does not resume rejected approvals', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-tick-rejected-'))
+
+  try {
+    await installLoop({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      agent: 'codex',
+      sourceRoot: new URL('..', import.meta.url)
+    })
+
+    const run = await createLoopRun({
+      loopId: 'bug-autofix',
+      targetRepo: target,
+      trigger: 'manual',
+      signal: 'Checkout crash repeated 21 times.',
+      now: new Date('2026-06-16T08:00:00.000Z')
+    })
+    const approval = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Merge PR https://github.com/acme/app/pull/123',
+      reason: 'Fix is tested but touches checkout payment flow.',
+      risk: 'medium',
+      now: new Date('2026-06-16T08:10:00.000Z')
+    })
+    await rejectApproval({
+      targetRepo: target,
+      approvalId: approval.id,
+      decidedBy: 'founder',
+      note: 'Rejected.',
+      now: new Date('2026-06-16T08:20:00.000Z')
+    })
+
+    const report = await tickLoops({
+      targetRepo: target,
+      now: new Date('2026-06-16T08:30:00.000Z')
+    })
+
+    assert.equal(report.rows[0].action, 'waiting')
+
+    const runs = parseJsonl(await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8'))
+    assert.equal(runs.filter(item => item.trigger === 'approval').length, 0)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+function parseJsonl(raw) {
+  return raw
+    .split('\n')
+    .filter(Boolean)
+    .map(line => JSON.parse(line))
+}

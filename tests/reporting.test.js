@@ -5,7 +5,13 @@ import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { installLoop } from '../src/installer.js'
 import { createLoopRun } from '../src/runner.js'
-import { attachArtifact, recordOutcome, requestApproval } from '../src/reporting.js'
+import {
+  approveApproval,
+  attachArtifact,
+  recordOutcome,
+  rejectApproval,
+  requestApproval
+} from '../src/reporting.js'
 
 test('attachArtifact records proof on the run, artifacts log, and loop journal', async () => {
   const target = await mkdtemp(join(tmpdir(), 'win-loops-reporting-artifact-'))
@@ -109,6 +115,121 @@ test('requestApproval writes a pending approval and marks the run waiting for ap
     const journal = await readFile(join(target, '.win', 'loops', 'bug-autofix', 'journal.md'), 'utf8')
     assert.match(journal, /Approval Requested/)
     assert.match(journal, /checkout payment flow/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+test('requestApproval makes unique approval ids for same-second requests', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-reporting-approval-id-'))
+
+  try {
+    const run = await createInstalledRun(target)
+    const now = new Date('2026-06-16T11:00:00.000Z')
+    const first = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Merge PR',
+      reason: 'Touches checkout.',
+      risk: 'medium',
+      now
+    })
+    const second = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Roll back PR',
+      reason: 'Metric got worse.',
+      risk: 'low',
+      now
+    })
+
+    assert.notEqual(first.id, second.id)
+
+    const approvals = parseJsonl(await readFile(join(target, '.win', 'state', 'approvals.jsonl'), 'utf8'))
+    assert.equal(new Set(approvals.map(approval => approval.id)).size, 2)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+test('approveApproval records a decision and clears the pending approval', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-reporting-approve-'))
+
+  try {
+    const run = await createInstalledRun(target)
+    const approval = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Merge PR https://github.com/acme/app/pull/123',
+      reason: 'Fix is tested but touches checkout payment flow.',
+      risk: 'medium',
+      now: new Date('2026-06-16T11:00:00.000Z')
+    })
+
+    const decision = await approveApproval({
+      targetRepo: target,
+      approvalId: approval.id,
+      decidedBy: 'founder',
+      note: 'Approved after checking tests.',
+      now: new Date('2026-06-16T11:10:00.000Z')
+    })
+
+    assert.equal(decision.status, 'approved')
+    assert.equal(decision.approvalId, approval.id)
+
+    const approvals = parseJsonl(await readFile(join(target, '.win', 'state', 'approvals.jsonl'), 'utf8'))
+    assert.equal(approvals.length, 2)
+    assert.equal(approvals[1].status, 'approved')
+
+    const runs = parseJsonl(await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8'))
+    assert.equal(runs[0].status, 'approval_approved')
+    assert.deepEqual(runs[0].pendingApprovals, [])
+    assert.equal(runs[0].approvalDecisions[0].approvalId, approval.id)
+
+    const journal = await readFile(join(target, '.win', 'loops', 'bug-autofix', 'journal.md'), 'utf8')
+    assert.match(journal, /Approval Approved/)
+    assert.match(journal, /Approved after checking tests/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
+test('rejectApproval records a decision and marks the run rejected', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-reporting-reject-'))
+
+  try {
+    const run = await createInstalledRun(target)
+    const approval = await requestApproval({
+      targetRepo: target,
+      runId: run.id,
+      action: 'Merge PR https://github.com/acme/app/pull/123',
+      reason: 'Fix is tested but touches checkout payment flow.',
+      risk: 'high',
+      now: new Date('2026-06-16T11:00:00.000Z')
+    })
+
+    const decision = await rejectApproval({
+      targetRepo: target,
+      approvalId: approval.id,
+      decidedBy: 'founder',
+      note: 'Rejected until a safer migration is added.',
+      now: new Date('2026-06-16T11:10:00.000Z')
+    })
+
+    assert.equal(decision.status, 'rejected')
+
+    const approvals = parseJsonl(await readFile(join(target, '.win', 'state', 'approvals.jsonl'), 'utf8'))
+    assert.equal(approvals.length, 2)
+    assert.equal(approvals[1].status, 'rejected')
+
+    const runs = parseJsonl(await readFile(join(target, '.win', 'state', 'runs.jsonl'), 'utf8'))
+    assert.equal(runs[0].status, 'approval_rejected')
+    assert.deepEqual(runs[0].pendingApprovals, [])
+    assert.equal(runs[0].approvalDecisions[0].status, 'rejected')
+
+    const journal = await readFile(join(target, '.win', 'loops', 'bug-autofix', 'journal.md'), 'utf8')
+    assert.match(journal, /Approval Rejected/)
+    assert.match(journal, /safer migration/)
   } finally {
     await rm(target, { recursive: true, force: true })
   }
