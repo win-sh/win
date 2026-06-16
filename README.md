@@ -1,4 +1,4 @@
-![win.sh business loops for AI agents](https://raw.githubusercontent.com/win-sh/win/main/assets/readme-banner.svg)
+![win.sh business loops for AI agents](https://raw.githubusercontent.com/win-sh/win/main/assets/readme-banner.jpg)
 
 # win
 
