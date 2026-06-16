@@ -43,6 +43,16 @@ node /Users/romainsimon/dev/win-loops/bin/win-loops.js run bug-autofix \
   --fixture /Users/romainsimon/dev/win-loops/loops/bug-autofix/examples/sentry-error-group.json
 ```
 
+Create a run from a local Sentry/GitHub connector snapshot:
+
+```bash
+node /Users/romainsimon/dev/win-loops/bin/win-loops.js run bug-autofix \
+  --repo /path/to/repo \
+  --connector-fixture /Users/romainsimon/dev/win-loops/loops/bug-autofix/examples/connector-snapshot.json
+```
+
+The connector fixture path is the local stand-in for hosted OAuth connectors. It lets the loop normalize Sentry issue data, impacted paying users, GitHub codeowners, and recent commits before creating the run brief.
+
 Then ask the agent:
 
 ```text

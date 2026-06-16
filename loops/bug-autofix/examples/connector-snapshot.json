@@ -1,0 +1,125 @@
+{
+  "sentry": {
+    "issue": {
+      "id": "9821",
+      "shortId": "BUG-9821",
+      "slug": "checkout-null-pointer",
+      "title": "TypeError: Cannot read properties of null (reading 'priceId')",
+      "level": "error",
+      "count": 64,
+      "userCount": 12,
+      "firstSeen": "2026-06-16T07:12:00.000Z",
+      "lastSeen": "2026-06-16T08:41:00.000Z",
+      "release": "melies-web@2026.06.16-1",
+      "permalink": "https://sentry.io/organizations/acme/issues/9821/",
+      "environment": "production"
+    },
+    "events": [
+      {
+        "id": "evt-1",
+        "user": {
+          "id": "cus_melies_1042",
+          "isPaying": true,
+          "plan": "pro",
+          "mrr": 49
+        },
+        "tags": {
+          "route": "/app/checkout",
+          "transaction": "POST /api/checkout/session"
+        },
+        "stacktrace": [
+          {
+            "function": "createCheckoutSession",
+            "file": "src/checkout/createCheckoutSession.ts",
+            "line": 88,
+            "inApp": true
+          },
+          {
+            "function": "POST",
+            "file": "src/app/api/checkout/session/route.ts",
+            "line": 41,
+            "inApp": true
+          }
+        ]
+      },
+      {
+        "id": "evt-2",
+        "user": {
+          "id": "cus_melies_2117",
+          "isPaying": true,
+          "plan": "team",
+          "mrr": 99
+        },
+        "tags": {
+          "route": "/api/checkout/session",
+          "transaction": "POST /api/checkout/session"
+        },
+        "stacktrace": [
+          {
+            "function": "createCheckoutSession",
+            "file": "src/checkout/createCheckoutSession.ts",
+            "line": 88,
+            "inApp": true
+          }
+        ]
+      },
+      {
+        "id": "evt-3",
+        "user": {
+          "id": "visitor_44",
+          "isPaying": false
+        },
+        "tags": {
+          "route": "/app/checkout"
+        },
+        "stacktrace": [
+          {
+            "function": "formatPrice",
+            "file": "src/lib/pricing.ts",
+            "line": 37,
+            "inApp": true
+          }
+        ]
+      }
+    ]
+  },
+  "github": {
+    "repository": {
+      "fullName": "acme/melies-web",
+      "defaultBranch": "main"
+    },
+    "codeowners": [
+      {
+        "pattern": "src/checkout/",
+        "owner": "@billing-checkout"
+      },
+      {
+        "pattern": "src/app/api/checkout/",
+        "owner": "@billing-platform"
+      }
+    ],
+    "recentCommits": [
+      {
+        "sha": "abc1234",
+        "message": "Refactor checkout price lookup",
+        "author": "Romain",
+        "date": "2026-06-16T06:55:00.000Z",
+        "files": [
+          "src/checkout/createCheckoutSession.ts",
+          "src/lib/pricing.ts"
+        ],
+        "url": "https://github.com/acme/melies-web/commit/abc1234"
+      },
+      {
+        "sha": "def5678",
+        "message": "Tweak dashboard copy",
+        "author": "Design",
+        "date": "2026-06-16T06:12:00.000Z",
+        "files": [
+          "src/app/dashboard/page.tsx"
+        ],
+        "url": "https://github.com/acme/melies-web/commit/def5678"
+      }
+    ]
+  }
+}

@@ -6,7 +6,7 @@ import { validateCatalog } from '../src/eval.js'
 import { buildExecPlan, executeExecPlan, renderExecPlan } from '../src/executor.js'
 import { buildInbox, pickNextAction, renderInbox, renderNextAction } from '../src/inbox.js'
 import { installLoop, setLoopEnabled } from '../src/installer.js'
-import { buildBugAutofixSignal } from '../src/loops/bug-autofix.js'
+import { buildBugAutofixSignal, buildBugAutofixSignalFromConnectors } from '../src/loops/bug-autofix.js'
 import {
   acceptArtifactSuggestion,
   listArtifactSuggestions,
@@ -114,18 +114,27 @@ async function runLoop(args) {
   const targetRepo = readOption(args, '--repo') || process.cwd()
   const trigger = readOption(args, '--trigger') || 'manual'
   const fixtureFile = readOption(args, '--fixture')
+  const connectorFixtureFile = readOption(args, '--connector-fixture')
   const signalFile = readOption(args, '--signal-file')
-  const signal = await resolveSignal({ loopId, fixtureFile, signalFile, args })
+  const signal = await resolveSignal({ loopId, fixtureFile, connectorFixtureFile, signalFile, args })
   return createLoopRun({ loopId, targetRepo, trigger, signal })
 }
 
-async function resolveSignal({ loopId, fixtureFile, signalFile, args }) {
+async function resolveSignal({ loopId, fixtureFile, connectorFixtureFile, signalFile, args }) {
   if (fixtureFile) {
     const fixture = JSON.parse(await readFile(resolve(fixtureFile), 'utf8'))
     if (loopId === 'bug-autofix') {
       return buildBugAutofixSignal(fixture).runBrief
     }
     return JSON.stringify(fixture, null, 2)
+  }
+
+  if (connectorFixtureFile) {
+    const snapshot = JSON.parse(await readFile(resolve(connectorFixtureFile), 'utf8'))
+    if (loopId === 'bug-autofix') {
+      return buildBugAutofixSignalFromConnectors(snapshot).runBrief
+    }
+    return JSON.stringify(snapshot, null, 2)
   }
 
   if (signalFile) {
@@ -308,7 +317,7 @@ Commands:
   list
   inspect <loop>
   install <loop> [--repo <path>] [--agent codex|claude-code]
-  run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>]
+  run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>] [--connector-fixture <path>]
   status [--repo <path>]
   inbox [--repo <path>]
   next [--repo <path>]

@@ -50,6 +50,16 @@ node bin/win-loops.js run bug-autofix \
   --fixture loops/bug-autofix/examples/sentry-error-group.json
 ```
 
+Create a `bug-autofix` run from a local Sentry/GitHub connector snapshot:
+
+```bash
+node bin/win-loops.js run bug-autofix \
+  --repo /path/to/app \
+  --connector-fixture loops/bug-autofix/examples/connector-snapshot.json
+```
+
+Connector snapshots are deterministic JSON payloads shaped like hosted connector output. For `bug-autofix`, the adapter normalizes Sentry issue data, affected users, stack frames, GitHub codeowners, and recent commits into one scoped run brief.
+
 Then ask Codex or Claude Code to execute the generated run brief under `.win/runs/`.
 
 Show the local loop dashboard:
@@ -167,7 +177,7 @@ The hosted product should import and run these same loop packs. Core loop logic 
 win-loops list
 win-loops inspect <loop>
 win-loops install <loop> [--repo <path>] [--agent codex|claude-code]
-win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>]
+win-loops run <loop> [--repo <path>] [--trigger manual|signal] [--signal <text>] [--signal-file <path>] [--fixture <path>] [--connector-fixture <path>]
 win-loops status [--repo <path>]
 win-loops inbox [--repo <path>]
 win-loops next [--repo <path>]
@@ -196,4 +206,4 @@ npm run eval
 npm run check
 ```
 
-Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, operator inboxes, executor dry-runs and execution capture, artifact suggestions, reporting commands, CLI flows, and journal writes.
+Tests cover loop parsing, catalog validation, installation into a target repo, run-record creation, adaptive scheduling metadata, local scheduler ticks, connector snapshots, operator inboxes, executor dry-runs and execution capture, artifact suggestions, reporting commands, CLI flows, and journal writes.

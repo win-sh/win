@@ -39,6 +39,40 @@ test('CLI run bug-autofix --fixture creates a run from a sentry-like fixture', a
   }
 })
 
+test('CLI run bug-autofix --connector-fixture creates a run from Sentry and GitHub snapshots', async () => {
+  const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-connector-'))
+
+  try {
+    await execFileAsync(process.execPath, ['bin/win-loops.js', 'install', 'bug-autofix', '--repo', target], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const { stdout } = await execFileAsync(process.execPath, [
+      'bin/win-loops.js',
+      'run',
+      'bug-autofix',
+      '--repo',
+      target,
+      '--connector-fixture',
+      'loops/bug-autofix/examples/connector-snapshot.json'
+    ], {
+      cwd: new URL('..', import.meta.url).pathname
+    })
+
+    const run = JSON.parse(stdout)
+    const brief = await readFile(join(target, '.win', 'runs', `${run.id}.md`), 'utf8')
+
+    assert.match(brief, /Connector Evidence/)
+    assert.match(brief, /https:\/\/sentry\.io\/organizations\/acme\/issues\/9821\//)
+    assert.match(brief, /acme\/melies-web/)
+    assert.match(brief, /abc1234/)
+    assert.match(brief, /2 paying users/)
+    assert.match(brief, /Do not merge/)
+  } finally {
+    await rm(target, { recursive: true, force: true })
+  }
+})
+
 test('CLI tick shows scheduled loop actions and writes due run briefs', async () => {
   const target = await mkdtemp(join(tmpdir(), 'win-loops-cli-tick-'))
 

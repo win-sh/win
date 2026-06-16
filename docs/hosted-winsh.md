@@ -23,6 +23,23 @@ The hosted database stores per-company loop state:
 - outcomes
 - next run schedule
 
+## Connector Snapshots
+
+Hosted connectors should produce deterministic snapshot payloads before a loop runs. The loop adapter owns normalization from connector payloads into a scoped run signal.
+
+For `bug-autofix`, the snapshot combines:
+
+- Sentry issue metadata, sample events, stack frames, affected routes, and impacted users
+- GitHub repository metadata, codeowners, and recent commits
+
+The local harness can exercise the same contract with:
+
+```bash
+win-loops run bug-autofix \
+  --repo /path/to/repo \
+  --connector-fixture loops/bug-autofix/examples/connector-snapshot.json
+```
+
 ## Web UI
 
 Add a top-level `Loops` section:

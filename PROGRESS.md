@@ -34,6 +34,8 @@ Last updated: 2026-06-16
 - Added report-back parsing from execution logs into pending artifact suggestions.
 - Added `artifact suggestions`, `artifact suggest`, and `artifact accept` commands.
 - Added `artifact-suggestions.jsonl` state plus journal entries for suggested proof.
+- Added local Sentry/GitHub connector snapshot support for `bug-autofix`.
+- Added CLI support for `win-loops run bug-autofix --connector-fixture <path>`.
 
 ## Current Quality Gates
 
@@ -43,7 +45,8 @@ Last updated: 2026-06-16
 
 ## Next Work
 
-- Add real connector adapters for the first three loops.
+- Add connector snapshot adapters for `seo-growth` and `feedback-to-fix`.
+- Add live connector clients behind the snapshot contracts.
 - Add richer deterministic evals per loop, beyond contract validation.
 - Add MCP server surface for Codex/Claude integration.
 - Add hosted win.sh importer and loop dashboard.
