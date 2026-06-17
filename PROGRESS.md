@@ -62,6 +62,7 @@ Last updated: 2026-06-17
 - Pushed the `v0.1.2` release tag.
 - Verified the public npm registry resolves `@win.sh/win@0.1.2`.
 - Verified a clean global install from npm exposes the `win` binary and loop catalog.
+- Verified the published CLI browser callback flow stores an approved token in local config.
 - Updated the release workflow to skip publishing when the exact package version is already present on npm.
 
 ## Current Quality Gates
