@@ -81,7 +81,7 @@ Allowed action: npm publish
 
 Npm trusted publishing uses OIDC, so the release workflow has `id-token: write` and does not need a long-lived npm token.
 
-For the first `@win.sh/win` publish, npm may require the package to exist before package-level trusted publishing can be configured. If that happens, add a temporary GitHub Actions secret named `NPM_TOKEN` with publish access to the `win.sh` npm org, push the `v0.1.0` tag, then remove the secret after the package exists and trusted publishing is configured.
+For the first `@win.sh/win` publish, npm may require the package to exist before package-level trusted publishing can be configured. If that happens, add a temporary GitHub Actions secret named `NPM_TOKEN` with publish access to the `win.sh` npm org, push the release tag that matches `package.json`, then remove the secret after the package exists and trusted publishing is configured.
 
 ## Release Checklist
 
@@ -89,16 +89,22 @@ For the first `@win.sh/win` publish, npm may require the package to exist before
 2. `npm run pack:dry`
 3. Confirm `README.md`, `docs/winsh.md`, and `docs/publishing.md` are current.
 4. Confirm GitHub Actions passes on `main`.
-5. Tag the release:
+5. Confirm the release tag matches `package.json`:
 
 ```bash
-git tag v0.1.0
+node -p "'v' + require('./package.json').version"
 ```
 
-6. Let GitHub Actions publish the tag:
+6. Tag the release:
 
 ```bash
-git push origin v0.1.0
+git tag v0.1.1
+```
+
+7. Let GitHub Actions publish the tag:
+
+```bash
+git push origin v0.1.1
 ```
 
 ## Required Secrets

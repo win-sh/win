@@ -50,6 +50,8 @@ Last updated: 2026-06-17
 - Verified CLI browser approval URL generation for hosted API token login.
 - Added `CHANGELOG.md` release notes for `v0.1.0`.
 - Noted that the existing `v0.1.0` tag predates the final banner and changelog docs.
+- Bumped the publish candidate to `@win.sh/win@0.1.1` to avoid rewriting the existing public `v0.1.0` tag.
+- Hardened the release workflow with tag/package version matching and token-or-OIDC publishing.
 
 ## Current Quality Gates
 
@@ -62,7 +64,7 @@ Last updated: 2026-06-17
 
 - Publish `@win.sh/win` once npm org access is configured.
 - Configure npm trusted publishing for `win-sh/win` or add a temporary `NPM_TOKEN` to bootstrap the first publish.
-- Cut a fresh release tag after npm publishing is configured, or deliberately retag `v0.1.0` only if the team accepts rewriting that public tag.
+- Cut and push the `v0.1.1` release tag after npm publishing is configured.
 - Complete a browser-approved CLI token creation test with a signed-in win.sh session.
 - Add richer deterministic evals per individual loop as loops graduate to production autonomy.
 - Add MCP server surface for Codex/Claude if direct MCP integration becomes preferable to CLI handoff.

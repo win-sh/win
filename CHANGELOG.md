@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.1 - 2026-06-17
+
+Release packaging correction for the first npm publish candidate.
+
+- Bumped the package to `0.1.1` so the final banner, changelog, and release docs can ship without rewriting the already-pushed `v0.1.0` tag.
+- Updated the release workflow to require the pushed tag to match `package.json`.
+- Updated the release workflow to publish with a temporary `NPM_TOKEN` when present, or npm trusted publishing OIDC when configured.
+- Removed the obsolete feature branch from CI triggers after the remote branch cleanup.
+
 ## v0.1.0 - 2026-06-17
 
 Initial public release candidate for `@win.sh/win`.
@@ -67,10 +76,10 @@ Full browser-approved token creation still requires a signed-in win.sh browser s
 
 - GitHub repository: `https://github.com/win-sh/win`
 - Default branch: `main`
-- Release tag: `v0.1.0`
+- Release tag: `v0.1.1`
 - npm package target: `@win.sh/win`
 
-The current `main` branch contains the final banner and changelog docs. The existing `v0.1.0` tag predates those docs, so publish from a fresh release tag once npm publishing is configured.
+The current `main` branch contains the final banner and changelog docs. The existing `v0.1.0` tag predates those docs, so it is left untouched; use `v0.1.1` for the first final npm publish candidate.
 
 The package is ready to publish, but npm publication depends on either:
 
