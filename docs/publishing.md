@@ -107,6 +107,17 @@ git tag v0.1.1
 git push origin v0.1.1
 ```
 
+## If Publish Fails
+
+If the Release workflow reaches the `Publish` step and fails while npm still returns `404` for `@win.sh/win`, publishing credentials are not configured yet.
+
+Fix one of these:
+
+- Configure npm trusted publishing for `win-sh/win` and workflow filename `release.yml`.
+- Or add a temporary GitHub Actions secret named `NPM_TOKEN` with publish access to the `win.sh` npm organization.
+
+After credentials are configured, rerun the failed Release workflow for the existing tag. Do not create another tag unless `package.json` version changes.
+
 ## Required Secrets
 
 No npm token is required when trusted publishing is configured on npmjs.com. `NPM_TOKEN` is only for bootstrapping the first package version if npm package settings are not available yet. If the org chooses not to use trusted publishing, remove `publishConfig.provenance` or publish from a supported CI environment with an authorized token.

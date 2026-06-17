@@ -52,6 +52,9 @@ Last updated: 2026-06-17
 - Noted that the existing `v0.1.0` tag predates the final banner and changelog docs.
 - Bumped the publish candidate to `@win.sh/win@0.1.1` to avoid rewriting the existing public `v0.1.0` tag.
 - Hardened the release workflow with tag/package version matching and token-or-OIDC publishing.
+- Pushed the `v0.1.1` release tag after CI passed on `main`.
+- Confirmed the `v0.1.1` Release workflow passed checks and failed only at the npm `Publish` step.
+- Confirmed npm still returns `404` for `@win.sh/win` and the local npm token returns `E401`.
 
 ## Current Quality Gates
 
@@ -64,7 +67,7 @@ Last updated: 2026-06-17
 
 - Publish `@win.sh/win` once npm org access is configured.
 - Configure npm trusted publishing for `win-sh/win` or add a temporary `NPM_TOKEN` to bootstrap the first publish.
-- Cut and push the `v0.1.1` release tag after npm publishing is configured.
+- Rerun the failed `v0.1.1` Release workflow after npm trusted publishing or `NPM_TOKEN` is configured.
 - Complete a browser-approved CLI token creation test with a signed-in win.sh session.
 - Add richer deterministic evals per individual loop as loops graduate to production autonomy.
 - Add MCP server surface for Codex/Claude if direct MCP integration becomes preferable to CLI handoff.
