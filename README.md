@@ -218,9 +218,17 @@ Installing a loop writes inspectable state into the target repo:
 
 .agents/
   skills/win-<loop-id>/SKILL.md
+
+.claude/
+  skills/win-<loop-id>/SKILL.md
+
+AGENTS.md
+CLAUDE.md
 ```
 
 Nothing is hidden. You can inspect, diff, commit, back up, or migrate every important decision.
+
+`AGENTS.md` makes the loop visible to Codex and Codex Automations. `CLAUDE.md` plus `.claude/skills` makes the loop visible to Claude Code and Claude Code recurring tasks.
 
 ## Hosted win.sh
 
@@ -336,7 +344,7 @@ Current coverage includes loop parsing, catalog validation, installation into ta
 
 ## Release Status
 
-Current `main` is package-ready for `@win.sh/win@0.1.1`. The existing `v0.1.0` tag predates the final banner and changelog docs, so it is left untouched; use `v0.1.1` for the first final npm publish candidate after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
+Current `main` is package-ready for `@win.sh/win@0.1.2`. The existing `v0.1.0` and `v0.1.1` tags predate the final automation compatibility changes, so they are left untouched; use `v0.1.2` for the first final npm publish candidate after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
 
 Hosted API docs are live at [win.sh/docs/api](https://win.sh/docs/api). Hosted snapshot calls require an API token, and full browser-approved CLI auth requires a signed-in win.sh session.
 
@@ -345,6 +353,7 @@ Hosted API docs are live at [win.sh/docs/api](https://win.sh/docs/api). Hosted s
 - [win.sh product and terminal docs](docs/winsh.md)
 - [local install](docs/local-install.md)
 - [hosted win.sh integration](docs/hosted-winsh.md)
+- [agent automations compatibility](docs/agent-automations.md)
 - [loop format](docs/loop-format.md)
 - [publishing](docs/publishing.md)
 - [changelog](CHANGELOG.md)

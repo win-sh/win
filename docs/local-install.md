@@ -25,7 +25,15 @@ This creates:
 
 .agents/
   skills/win-<loop-id>/SKILL.md
+
+.claude/
+  skills/win-<loop-id>/SKILL.md
+
+AGENTS.md
+CLAUDE.md
 ```
+
+`AGENTS.md` is the Codex project guidance file. `CLAUDE.md` is the Claude Code project guidance file. `win install` preserves existing content and adds or updates only the marked win.sh section.
 
 Create a run:
 

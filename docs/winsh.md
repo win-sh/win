@@ -7,7 +7,9 @@ It contains:
 - readable loop packs in `loops/*`
 - a terminal CLI published as `@win.sh/win`
 - local state and journal files under `.win/`
-- Codex and Claude Code compatible skills under `.agents/skills`
+- Codex-compatible skills under `.agents/skills`
+- Claude Code-compatible skills under `.claude/skills`
+- root `AGENTS.md` and `CLAUDE.md` guidance sections for native automations
 - connector snapshot contracts that hosted win.sh can fill from OAuth integrations
 
 ## Install

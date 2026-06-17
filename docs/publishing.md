@@ -98,13 +98,13 @@ node -p "'v' + require('./package.json').version"
 6. Tag the release:
 
 ```bash
-git tag v0.1.1
+git tag v0.1.2
 ```
 
 7. Let GitHub Actions publish the tag:
 
 ```bash
-git push origin v0.1.1
+git push origin v0.1.2
 ```
 
 ## If Publish Fails

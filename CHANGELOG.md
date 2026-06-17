@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.1.2 - 2026-06-17
+
+Agent automation compatibility release candidate.
+
+- `win install` now writes loop skills to both `.agents/skills` for Codex and `.claude/skills` for Claude Code.
+- `win install` now adds a marked win.sh section to `AGENTS.md` and `CLAUDE.md`, preserving existing project guidance.
+- Added Codex Automation and Claude Code recurring-task prompts in `docs/agent-automations.md`.
+- Documented the fixed wake-up/adaptive loop split: native automations wake the repo, `win tick` decides whether work is actually due.
+
 ## v0.1.1 - 2026-06-17
 
 Release packaging correction for the first npm publish candidate.
