@@ -70,6 +70,8 @@ Full browser-approved token creation still requires a signed-in win.sh browser s
 - Release tag: `v0.1.0`
 - npm package target: `@win.sh/win`
 
+The current `main` branch contains the final banner and changelog docs. The existing `v0.1.0` tag predates those docs, so publish from a fresh release tag once npm publishing is configured.
+
 The package is ready to publish, but npm publication depends on either:
 
 - npm trusted publishing configured for GitHub Actions, or

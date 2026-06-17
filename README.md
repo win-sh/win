@@ -336,7 +336,7 @@ Current coverage includes loop parsing, catalog validation, installation into ta
 
 ## Release Status
 
-`v0.1.0` is tagged and package-ready for `@win.sh/win`. The npm package will appear after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
+Current `main` is package-ready for `@win.sh/win`. The existing `v0.1.0` tag predates the final banner and changelog docs, so publish from a fresh release tag after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
 
 Hosted API docs are live at [win.sh/docs/api](https://win.sh/docs/api). Hosted snapshot calls require an API token, and full browser-approved CLI auth requires a signed-in win.sh session.
 
