@@ -1,6 +1,6 @@
 # Progress
 
-Last updated: 2026-06-16
+Last updated: 2026-06-17
 
 ## Completed
 
@@ -43,18 +43,25 @@ Last updated: 2026-06-16
 - Added publish-ready package metadata for `@win.sh/win` and GitHub `win-sh/win`.
 - Added GitHub Actions CI and npm dry-pack checks.
 - Added full win.sh product, terminal auth, connector, and publishing docs.
+- Pushed the repository to `github.com/win-sh/win.git` with `main` as the default branch.
+- Removed the obsolete remote feature branch.
+- Verified production win.sh API docs, homepage links, and footer links.
+- Verified production API auth failure behavior for unauthenticated and invalid-token requests.
+- Verified CLI browser approval URL generation for hosted API token login.
+- Added `CHANGELOG.md` release notes for `v0.1.0`.
 
 ## Current Quality Gates
 
 - `npm test`
 - `npm run eval`
 - `npm run check`
+- `npm run pack:dry`
 
 ## Next Work
 
-- Push to `github.com/win-sh/win.git` once the org repo exists.
 - Publish `@win.sh/win` once npm org access is configured.
-- Implement hosted win.sh Settings UI and connector snapshot API against the documented contracts.
+- Configure npm trusted publishing for `win-sh/win` or add a temporary `NPM_TOKEN` to bootstrap the first publish.
+- Complete a browser-approved CLI token creation test with a signed-in win.sh session.
 - Add richer deterministic evals per individual loop as loops graduate to production autonomy.
 - Add MCP server surface for Codex/Claude if direct MCP integration becomes preferable to CLI handoff.
 - Add launchd/systemd wrappers if users want a daemon instead of cron or hosted scheduling.

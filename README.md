@@ -334,6 +334,12 @@ npm run pack:dry
 
 Current coverage includes loop parsing, catalog validation, installation into target repos, run brief creation, adaptive scheduling, connector snapshots, terminal auth, hosted snapshot fetching, operator queues, executor dry-runs, execution capture, artifact suggestions, approvals, outcomes, and journal writes.
 
+## Release Status
+
+`v0.1.0` is tagged and package-ready for `@win.sh/win`. The npm package will appear after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
+
+Hosted API docs are live at [win.sh/docs/api](https://win.sh/docs/api). Hosted snapshot calls require an API token, and full browser-approved CLI auth requires a signed-in win.sh session.
+
 ## Documentation
 
 - [win.sh product and terminal docs](docs/winsh.md)
@@ -341,6 +347,7 @@ Current coverage includes loop parsing, catalog validation, installation into ta
 - [hosted win.sh integration](docs/hosted-winsh.md)
 - [loop format](docs/loop-format.md)
 - [publishing](docs/publishing.md)
+- [changelog](CHANGELOG.md)
 
 ## License
 
