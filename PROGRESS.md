@@ -54,10 +54,15 @@ Last updated: 2026-06-17
 - Hardened the release workflow with tag/package version matching and token-or-OIDC publishing.
 - Pushed the `v0.1.1` release tag after CI passed on `main`.
 - Confirmed the `v0.1.1` Release workflow passed checks and failed only at the npm `Publish` step.
-- Confirmed npm still returns `404` for `@win.sh/win` and the local npm token returns `E401`.
+- Recorded the earlier `v0.1.1` npm publish blocker before valid npm org access was available.
 - Added Codex Automation and Claude Code recurring-task compatibility by writing both `.agents/skills` and `.claude/skills`.
 - Added marked win.sh guidance sections to `AGENTS.md` and `CLAUDE.md` during loop install.
 - Bumped the next publish candidate to `@win.sh/win@0.1.2` because `v0.1.1` predates the automation compatibility changes.
+- Published `@win.sh/win@0.1.2` to npm.
+- Pushed the `v0.1.2` release tag.
+- Verified the public npm registry resolves `@win.sh/win@0.1.2`.
+- Verified a clean global install from npm exposes the `win` binary and loop catalog.
+- Updated the release workflow to skip publishing when the exact package version is already present on npm.
 
 ## Current Quality Gates
 
@@ -68,9 +73,7 @@ Last updated: 2026-06-17
 
 ## Next Work
 
-- Publish `@win.sh/win` once npm org access is configured.
-- Configure npm trusted publishing for `win-sh/win` or add a temporary `NPM_TOKEN` to bootstrap the first publish.
-- Cut and push the `v0.1.2` release tag after npm trusted publishing or `NPM_TOKEN` is configured.
+- Configure npm trusted publishing for `win-sh/win` before the next release, now that the package exists on npm.
 - Complete a browser-approved CLI token creation test with a signed-in win.sh session.
 - Add richer deterministic evals per individual loop as loops graduate to production autonomy.
 - Add MCP server surface for Codex/Claude if direct MCP integration becomes preferable to CLI handoff.

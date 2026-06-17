@@ -344,7 +344,9 @@ Current coverage includes loop parsing, catalog validation, installation into ta
 
 ## Release Status
 
-Current `main` is package-ready for `@win.sh/win@0.1.2`. The existing `v0.1.0` and `v0.1.1` tags predate the final automation compatibility changes, so they are left untouched; use `v0.1.2` for the first final npm publish candidate after the `win.sh` npm org has either trusted publishing configured for GitHub Actions or a temporary `NPM_TOKEN` with publish access.
+`@win.sh/win@0.1.2` is published on npm and installable with `npm install -g @win.sh/win`. The `v0.1.2` tag points at the published package source; current `main` includes release-guard and documentation updates for future tags.
+
+The first npm version was bootstrapped locally without provenance so the package could exist under the `win.sh` scope. Future releases should use npm trusted publishing through GitHub Actions, or a temporary `NPM_TOKEN` secret only when bootstrapping is required.
 
 Hosted API docs are live at [win.sh/docs/api](https://win.sh/docs/api). Hosted snapshot calls require an API token, and full browser-approved CLI auth requires a signed-in win.sh session.
 

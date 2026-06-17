@@ -2,12 +2,14 @@
 
 ## v0.1.2 - 2026-06-17
 
-Agent automation compatibility release candidate.
+Agent automation compatibility release.
 
 - `win install` now writes loop skills to both `.agents/skills` for Codex and `.claude/skills` for Claude Code.
 - `win install` now adds a marked win.sh section to `AGENTS.md` and `CLAUDE.md`, preserving existing project guidance.
 - Added Codex Automation and Claude Code recurring-task prompts in `docs/agent-automations.md`.
 - Documented the fixed wake-up/adaptive loop split: native automations wake the repo, `win tick` decides whether work is actually due.
+- Published `@win.sh/win@0.1.2` to npm and verified clean install from the public registry.
+- Added a release workflow guard that skips npm publish when the exact package version already exists.
 
 ## v0.1.1 - 2026-06-17
 
@@ -69,7 +71,7 @@ npm run check
 npm run pack:dry
 ```
 
-Current `npm run check` covers 55 tests plus the catalog eval with all 50 loop packs.
+Current `npm run check` covers 56 tests plus the catalog eval with all 50 loop packs.
 
 ### Hosted win.sh Status
 
@@ -85,21 +87,14 @@ Full browser-approved token creation still requires a signed-in win.sh browser s
 
 - GitHub repository: `https://github.com/win-sh/win`
 - Default branch: `main`
-- Release tag: `v0.1.1`
+- Release tag: `v0.1.2`
 - npm package target: `@win.sh/win`
 
-The current `main` branch contains the final banner and changelog docs. The existing `v0.1.0` tag predates those docs, so it is left untouched; use `v0.1.1` for the first final npm publish candidate.
-
-The package is ready to publish, but npm publication depends on either:
-
-- npm trusted publishing configured for GitHub Actions, or
-- a valid temporary `NPM_TOKEN` with publish access to the `win.sh` npm organization.
-
-Local npm authentication was not valid during verification, so `@win.sh/win` was not published from the terminal.
+`@win.sh/win@0.1.2` is published on npm and installable with `npm install -g @win.sh/win`. The first publish was bootstrapped locally without provenance; future releases should use npm trusted publishing from GitHub Actions.
 
 ### Known Limits
 
 - Local mode writes `.win/` and `.agents/` files into the target repo by design.
 - Hosted connector snapshots require a bearer token with the appropriate snapshot scope.
 - Browser-approved CLI auth requires a signed-in win.sh session.
-- The first npm publish may need a temporary token before package-level trusted publishing can be configured.
+- Trusted publishing still needs to be configured before the next provenance-backed npm release.
